@@ -1,4 +1,5 @@
 import 'package:burger_city_flutter/components/button.dart';
+import 'package:burger_city_flutter/components/input.dart';
 import 'package:flutter/material.dart';
 
 class StartScreen extends StatefulWidget {
@@ -10,6 +11,7 @@ class StartScreen extends StatefulWidget {
 
 class StartScreenState extends State<StartScreen> {
   bool isLoading = false;
+  bool isStarted = false;
 
   onStart() async {
     setState(() {
@@ -19,6 +21,7 @@ class StartScreenState extends State<StartScreen> {
     await Future.delayed(Duration(seconds: 1));
 
     setState(() {
+      isStarted = true;
       isLoading = false;
     });
   }
@@ -66,17 +69,74 @@ class StartScreenState extends State<StartScreen> {
     );
   }
 
+  Widget buildForm() {
+    return Container(
+        margin: EdgeInsets.only(top: 250, left: 30, right: 30),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: <Widget>[buildWelcome(), ...buildInputs()],
+        ));
+  }
+
+  List<Widget> buildInputs() {
+    return [
+      Container(
+        margin: EdgeInsets.only(bottom: 18),
+        child: Input(
+          placeholder: 'Email',
+          iconData: Icons.alternate_email,
+        ),
+      ),
+      Input(
+        placeholder: 'Password',
+        iconData: Icons.lock_outline,
+      )
+    ];
+  }
+
+  Widget buildWelcome() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 25),
+      child: Column(
+        children: <Widget>[
+          Text('Welcome Back!',
+              style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700)),
+          Text(
+            'Login to continue Burger City',
+            style: TextStyle(
+                fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget buildStart() {
+    return Stack(
+      children: <Widget>[buildLogo(), buildInfo(), buildButton()],
+    );
+  }
+
+  Widget buildLogin() {
+    return SingleChildScrollView(
+      child: Stack(
+        children: <Widget>[buildLogo(), buildForm()],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  image: AssetImage('assets/bg-darken.png'),
-                  fit: BoxFit.cover)),
-          child: Stack(
-            children: <Widget>[buildLogo(), buildInfo(), buildButton()],
-          )),
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/bg-darken.png'), fit: BoxFit.cover)),
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: isStarted ? buildLogin() : buildStart()),
     );
   }
 }
