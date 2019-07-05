@@ -1,5 +1,8 @@
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/input.dart';
+import 'package:burger_city_flutter/components/text_button.dart';
+import 'package:burger_city_flutter/components/text_button_checkbox.dart';
+import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class StartScreen extends StatefulWidget {
@@ -74,8 +77,71 @@ class StartScreenState extends State<StartScreen> {
         margin: EdgeInsets.only(top: 250, left: 30, right: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[buildWelcome(), ...buildInputs()],
+          children: <Widget>[
+            buildWelcome(),
+            ...buildInputs(),
+            Container(
+              margin: EdgeInsets.only(bottom: 35),
+              child: Row(
+                children: <Widget>[
+                  TextButtonCheckbox(
+                    text: 'Remember me',
+                    onTap: () {},
+                  ),
+                  Spacer(),
+                  TextButton(text: 'Forgot password?', onTap: () {})
+                ],
+              ),
+            ),
+            Button(
+              text: 'Log in',
+            )
+          ],
         ));
+  }
+
+  Widget buildBottomButtons() {
+    return Positioned(
+      bottom: 0,
+      left: 0,
+      right: 0,
+      top: 0,
+      child: Container(
+        padding: EdgeInsets.only(bottom: 26),
+        height: 100,
+        child: Column(
+          children: <Widget>[
+            Spacer(),
+            Container(
+              margin: EdgeInsets.only(bottom: 26),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextButton(
+                    onTap: () {},
+                    textColor: AppColors.MAIN_COLOR,
+                    text: 'New user? Sign up',
+                  ),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Container(
+                  width: 250,
+                  child: Text(
+                    'By signing up you indicate that you have read and agreed to the Patch Terms of Service',
+                    style: TextStyle(fontSize: 10, color: Colors.white),
+                    textAlign: TextAlign.center,
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
+      ),
+    );
   }
 
   List<Widget> buildInputs() {
@@ -87,9 +153,12 @@ class StartScreenState extends State<StartScreen> {
           iconData: Icons.alternate_email,
         ),
       ),
-      Input(
-        placeholder: 'Password',
-        iconData: Icons.lock_outline,
+      Container(
+        margin: EdgeInsets.only(bottom: 18),
+        child: Input(
+          placeholder: 'Password',
+          iconData: Icons.lock_outline,
+        ),
       )
     ];
   }
@@ -121,11 +190,23 @@ class StartScreenState extends State<StartScreen> {
   }
 
   Widget buildLogin() {
-    return SingleChildScrollView(
-      child: Stack(
-        children: <Widget>[buildLogo(), buildForm()],
-      ),
-    );
+    return LayoutBuilder(
+        builder: (BuildContext context, BoxConstraints viewportConstraints) {
+      return SingleChildScrollView(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
+          child: Container(
+            child: Stack(
+              children: <Widget>[
+                buildLogo(),
+                buildForm(),
+                buildBottomButtons()
+              ],
+            ),
+          ),
+        ),
+      );
+    });
   }
 
   @override

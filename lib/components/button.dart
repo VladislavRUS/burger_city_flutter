@@ -51,7 +51,10 @@ class Button extends StatelessWidget {
                   child: Center(
                     child: Text(
                       this.text,
-                      style: TextStyle(color: Colors.white, fontSize: 16),
+                      style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700),
                     ),
                   ),
                 )
