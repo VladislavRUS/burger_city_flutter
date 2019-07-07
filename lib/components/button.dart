@@ -26,7 +26,7 @@ class Button extends StatelessWidget {
         child: InkWell(
           onTap: _onTap,
           child: Container(
-            padding: EdgeInsets.only(top: 15, bottom: 15),
+            height: 48,
             child: Stack(
               children: <Widget>[
                 Positioned(

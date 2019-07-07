@@ -3,7 +3,9 @@ import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/text_button.dart';
 import 'package:burger_city_flutter/components/text_button_checkbox.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class StartScreen extends StatefulWidget {
   @override
@@ -13,6 +15,9 @@ class StartScreen extends StatefulWidget {
 }
 
 class StartScreenState extends State<StartScreen> {
+  static Store of(context) =>
+      ScopedModel.of<Store>(context, rebuildOnChange: true);
+
   bool isLoading = false;
   bool isStarted = false;
 
@@ -29,24 +34,22 @@ class StartScreenState extends State<StartScreen> {
     });
   }
 
+  onLogin() async {
+    await onStart();
+  }
+
   Widget buildLogo() {
-    return Positioned(
-      left: 0,
-      right: 0,
-      top: 85,
-      child: Container(
-        width: 100,
-        height: 120,
-        child: Image.asset('assets/logo.png'),
-      ),
+    return Container(
+      margin: EdgeInsets.only(top: 85),
+      width: 100,
+      height: 120,
+      child: Image.asset('assets/logo.png'),
     );
   }
 
-  Widget buildButton() {
-    return Positioned(
-      bottom: 80,
-      left: 30,
-      right: 30,
+  Widget buildStartButton() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 80, left: 30, right: 30),
       child: Button(
         text: 'Get start here',
         isLoading: isLoading,
@@ -56,25 +59,28 @@ class StartScreenState extends State<StartScreen> {
   }
 
   Widget buildInfo() {
-    return Positioned(
-      left: 30,
-      bottom: 180,
-      child: Container(
-          width: 120,
-          child: Text(
-            'Worlds Greatest Burgers.',
-            style: TextStyle(
-                height: 1.05,
-                fontSize: 31,
-                color: Colors.white,
-                fontWeight: FontWeight.w700),
-          )),
+    return Row(
+      children: <Widget>[
+        Container(
+            margin: EdgeInsets.only(bottom: 35, left: 30),
+            width: 120,
+            child: Text(
+              'World`s Greatest Burgers.',
+              style: TextStyle(
+                  height: 1.05,
+                  fontSize: 31,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700),
+            )),
+      ],
     );
   }
 
   Widget buildForm() {
+    Store store = of(context);
+
     return Container(
-        margin: EdgeInsets.only(top: 250, left: 30, right: 30),
+        margin: EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 50),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -86,7 +92,8 @@ class StartScreenState extends State<StartScreen> {
                 children: <Widget>[
                   TextButtonCheckbox(
                     text: 'Remember me',
-                    onTap: () {},
+                    isActive: store.shouldRemember,
+                    onTap: store.toggleRemember,
                   ),
                   Spacer(),
                   TextButton(text: 'Forgot password?', onTap: () {})
@@ -94,52 +101,48 @@ class StartScreenState extends State<StartScreen> {
               ),
             ),
             Button(
+              isLoading: isLoading,
               text: 'Log in',
+              onTap: onLogin,
             )
           ],
         ));
   }
 
   Widget buildBottomButtons() {
-    return Positioned(
-      bottom: 0,
-      left: 0,
-      right: 0,
-      top: 0,
-      child: Container(
-        padding: EdgeInsets.only(bottom: 26),
-        height: 100,
-        child: Column(
-          children: <Widget>[
-            Spacer(),
-            Container(
-              margin: EdgeInsets.only(bottom: 26),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  TextButton(
-                    onTap: () {},
-                    textColor: AppColors.MAIN_COLOR,
-                    text: 'New user? Sign up',
-                  ),
-                ],
-              ),
-            ),
-            Row(
+    return Container(
+      padding: EdgeInsets.only(bottom: 26),
+      height: 100,
+      child: Column(
+        children: <Widget>[
+          Spacer(),
+          Container(
+            margin: EdgeInsets.only(bottom: 26),
+            child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                Container(
-                  width: 250,
-                  child: Text(
-                    'By signing up you indicate that you have read and agreed to the Patch Terms of Service',
-                    style: TextStyle(fontSize: 10, color: Colors.white),
-                    textAlign: TextAlign.center,
-                  ),
-                )
+                TextButton(
+                  onTap: () {},
+                  textColor: AppColors.MAIN_COLOR,
+                  text: 'New user? Sign up',
+                ),
               ],
-            )
-          ],
-        ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                width: 250,
+                child: Text(
+                  'By signing up you indicate that you have read and agreed to the Patch Terms of Service',
+                  style: TextStyle(fontSize: 10, color: Colors.white),
+                  textAlign: TextAlign.center,
+                ),
+              )
+            ],
+          )
+        ],
       ),
     );
   }
@@ -157,6 +160,7 @@ class StartScreenState extends State<StartScreen> {
         margin: EdgeInsets.only(bottom: 18),
         child: Input(
           placeholder: 'Password',
+          isObscured: true,
           iconData: Icons.lock_outline,
         ),
       )
@@ -184,29 +188,40 @@ class StartScreenState extends State<StartScreen> {
   }
 
   Widget buildStart() {
-    return Stack(
-      children: <Widget>[buildLogo(), buildInfo(), buildButton()],
+    return Column(
+      children: <Widget>[
+        buildLogo(),
+        Spacer(),
+        buildInfo(),
+        buildStartButton()
+      ],
     );
   }
 
   Widget buildLogin() {
-    return LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints viewportConstraints) {
-      return SingleChildScrollView(
-        child: ConstrainedBox(
-          constraints: BoxConstraints(minHeight: viewportConstraints.maxHeight),
-          child: Container(
-            child: Stack(
-              children: <Widget>[
-                buildLogo(),
-                buildForm(),
-                buildBottomButtons()
-              ],
-            ),
-          ),
-        ),
-      );
-    });
+    bool isKeyboardHidden = MediaQuery.of(context).viewInsets.bottom == 0;
+
+    return SizedBox.expand(
+      child: Stack(
+        children: <Widget>[
+          LayoutBuilder(builder: (context, constraints) {
+            return ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: constraints.maxHeight),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[buildLogo(), buildForm()],
+                ),
+              ),
+            );
+          }),
+          isKeyboardHidden
+              ? Positioned.fill(
+                  child: buildBottomButtons(),
+                )
+              : null
+        ].where((widget) => widget != null).toList(),
+      ),
+    );
   }
 
   @override

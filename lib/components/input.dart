@@ -2,10 +2,11 @@ import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class Input extends StatelessWidget {
-  final IconData iconData;
-  final String placeholder;
+  IconData iconData;
+  String placeholder;
+  bool isObscured;
 
-  Input({this.iconData, this.placeholder});
+  Input({this.iconData, this.placeholder, this.isObscured = false});
 
   Widget buildIcon() {
     if (iconData == null) {
@@ -25,6 +26,7 @@ class Input extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(left: 15),
         child: TextField(
+          obscureText: this.isObscured,
           style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.w600,
