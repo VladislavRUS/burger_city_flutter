@@ -3,6 +3,8 @@ import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/text_button.dart';
 import 'package:burger_city_flutter/components/text_button_checkbox.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/constants/durations.dart';
+import 'package:burger_city_flutter/constants/routes.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -22,7 +24,8 @@ class LoginScreenState extends State<LoginScreen> {
   PageController pageController;
   bool isLoading = false;
 
-  static Store of(BuildContext context) => ScopedModel.of<Store>(context);
+  static Store of(BuildContext context) =>
+      ScopedModel.of<Store>(context, rebuildOnChange: true);
 
   LoginScreenState({this.pageController});
 
@@ -157,8 +160,14 @@ class LoginScreenState extends State<LoginScreen> {
     });
   }
 
-  onLogin() {
-    print('onLogin');
+  onLogin() async {
+    showLoader();
+
+    await Future.delayed(Durations.LOADING_DURATION);
+
+    hideLoader();
+
+    Navigator.of(context).pushReplacementNamed(Routes.APP);
   }
 
   @override

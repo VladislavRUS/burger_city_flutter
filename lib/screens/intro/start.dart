@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/components/big_text.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:flutter/material.dart';
@@ -34,14 +35,7 @@ class StartScreenState extends State<StartScreen> {
         Container(
             margin: EdgeInsets.only(bottom: 35, left: 30),
             width: 120,
-            child: Text(
-              'World`s Greatest Burgers.',
-              style: TextStyle(
-                  height: 1.05,
-                  fontSize: 31,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700),
-            )),
+            child: BigText('World`s Greatest Burgers.')),
       ],
     );
   }
@@ -60,7 +54,7 @@ class StartScreenState extends State<StartScreen> {
   onStart() async {
     showLoader();
 
-    await Future.delayed(Duration(seconds: 1));
+    await Future.delayed(Durations.LOADING_DURATION);
 
     hideLoader();
 

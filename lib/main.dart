@@ -1,4 +1,5 @@
 import 'package:burger_city_flutter/constants/routes.dart';
+import 'package:burger_city_flutter/screens/app/app.dart';
 import 'package:burger_city_flutter/screens/intro/intro.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
@@ -17,7 +18,10 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       initialRoute: Routes.INTRO,
-      routes: {Routes.INTRO: (_) => IntroScreen()},
+      routes: {
+        Routes.INTRO: (_) => IntroScreen(),
+        Routes.APP: (_) => AppScreen(),
+      },
     );
   }
 }
