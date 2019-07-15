@@ -7,36 +7,24 @@ import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class StartScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
+  PageController pageController;
+
+  LoginScreen({this.pageController});
+
   @override
   State<StatefulWidget> createState() {
-    return StartScreenState();
+    return LoginScreenState(pageController: pageController);
   }
 }
 
-class StartScreenState extends State<StartScreen> {
-  static Store of(context) =>
-      ScopedModel.of<Store>(context, rebuildOnChange: true);
-
+class LoginScreenState extends State<LoginScreen> {
+  PageController pageController;
   bool isLoading = false;
-  bool isStarted = false;
 
-  onStart() async {
-    setState(() {
-      isLoading = true;
-    });
+  static Store of(BuildContext context) => ScopedModel.of<Store>(context);
 
-    await Future.delayed(Duration(seconds: 1));
-
-    setState(() {
-      isStarted = true;
-      isLoading = false;
-    });
-  }
-
-  onLogin() async {
-    await onStart();
-  }
+  LoginScreenState({this.pageController});
 
   Widget buildLogo() {
     return Container(
@@ -47,40 +35,11 @@ class StartScreenState extends State<StartScreen> {
     );
   }
 
-  Widget buildStartButton() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 80, left: 30, right: 30),
-      child: Button(
-        text: 'Get start here',
-        isLoading: isLoading,
-        onTap: onStart,
-      ),
-    );
-  }
-
-  Widget buildInfo() {
-    return Row(
-      children: <Widget>[
-        Container(
-            margin: EdgeInsets.only(bottom: 35, left: 30),
-            width: 120,
-            child: Text(
-              'World`s Greatest Burgers.',
-              style: TextStyle(
-                  height: 1.05,
-                  fontSize: 31,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700),
-            )),
-      ],
-    );
-  }
-
   Widget buildForm() {
     Store store = of(context);
 
     return Container(
-        margin: EdgeInsets.only(top: 60, left: 30, right: 30, bottom: 50),
+        margin: EdgeInsets.only(top: 60, left: 30, right: 30),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
@@ -109,9 +68,28 @@ class StartScreenState extends State<StartScreen> {
         ));
   }
 
+  Widget buildWelcome() {
+    return Container(
+      margin: EdgeInsets.only(bottom: 25),
+      child: Column(
+        children: <Widget>[
+          Text('Welcome Back!',
+              style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.white,
+                  fontWeight: FontWeight.w700)),
+          Text(
+            'Login to continue Burger City',
+            style: TextStyle(
+                fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget buildBottomButtons() {
     return Container(
-      padding: EdgeInsets.only(bottom: 26),
       height: 100,
       child: Column(
         children: <Widget>[
@@ -167,72 +145,40 @@ class StartScreenState extends State<StartScreen> {
     ];
   }
 
-  Widget buildWelcome() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 25),
-      child: Column(
-        children: <Widget>[
-          Text('Welcome Back!',
-              style: TextStyle(
-                  fontSize: 22,
-                  color: Colors.white,
-                  fontWeight: FontWeight.w700)),
-          Text(
-            'Login to continue Burger City',
-            style: TextStyle(
-                fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
-          ),
-        ],
-      ),
-    );
+  showLoader() {
+    setState(() {
+      isLoading = true;
+    });
   }
 
-  Widget buildStart() {
-    return Column(
-      children: <Widget>[
-        buildLogo(),
-        Spacer(),
-        buildInfo(),
-        buildStartButton()
-      ],
-    );
+  hideLoader() {
+    setState(() {
+      isLoading = false;
+    });
   }
 
-  Widget buildLogin() {
-    bool isKeyboardHidden = MediaQuery.of(context).viewInsets.bottom == 0;
-
-    return SizedBox.expand(
-      child: Stack(
-        children: <Widget>[
-          LayoutBuilder(builder: (context, constraints) {
-            return ConstrainedBox(
-              constraints: BoxConstraints(maxHeight: constraints.maxHeight),
-              child: SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[buildLogo(), buildForm()],
-                ),
-              ),
-            );
-          }),
-          isKeyboardHidden
-              ? Positioned.fill(
-                  child: buildBottomButtons(),
-                )
-              : null
-        ].where((widget) => widget != null).toList(),
-      ),
-    );
+  onLogin() {
+    print('onLogin');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-          image: DecorationImage(
-              image: AssetImage('assets/bg-darken.png'), fit: BoxFit.cover)),
-      child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: isStarted ? buildLogin() : buildStart()),
+    return SizedBox.expand(
+      child: Stack(
+        children: <Widget>[
+          LayoutBuilder(builder: (context, constraints) {
+            return SingleChildScrollView(
+              child: Column(
+                children: <Widget>[
+                  buildLogo(),
+                  buildForm(),
+                  buildBottomButtons()
+                ],
+              ),
+            );
+          }),
+        ].where((widget) => widget != null).toList(),
+      ),
     );
   }
 }
