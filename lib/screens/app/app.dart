@@ -1,5 +1,4 @@
 import 'package:burger_city_flutter/constants/app_colors.dart';
-import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:burger_city_flutter/screens/burgers/burgers.dart';
 import 'package:burger_city_flutter/screens/home/home.dart';
 import 'package:flutter/material.dart';
@@ -108,6 +107,16 @@ class AppScreenState extends State<AppScreen> {
                     fit: BoxFit.fill,
                     image: AssetImage('assets/logo-title.png'))),
           ),
+          actions: <Widget>[
+            Container(
+              margin: EdgeInsets.only(right: 20),
+              width: 19,
+              height: 18,
+              decoration: BoxDecoration(
+                  image: DecorationImage(
+                      image: AssetImage('assets/icons/cart.png'))),
+            )
+          ],
         ),
         body: pageView);
   }

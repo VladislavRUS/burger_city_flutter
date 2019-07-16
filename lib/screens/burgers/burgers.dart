@@ -1,5 +1,7 @@
+import 'package:burger_city_flutter/components/custom_chip.dart';
 import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/constants/routes.dart';
 import 'package:burger_city_flutter/models/burger.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
@@ -77,7 +79,11 @@ class BurgersScreenState extends State<BurgersScreen> {
       child: Material(
         color: Colors.transparent,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Store store = of(context);
+            store.makeOrderFromBurger(burger);
+            Navigator.of(context).pushNamed(Routes.CUSTOMIZE);
+          },
           child: Row(
             children: <Widget>[
               Container(
@@ -109,6 +115,14 @@ class BurgersScreenState extends State<BurgersScreen> {
                         color: AppColors.MAIN_COLOR),
                   ),
                 ],
+              ),
+              Spacer(),
+              Container(
+                margin: EdgeInsets.only(right: 20),
+                child: CustomChip(
+                    child: Container(
+                        margin: EdgeInsets.only(left: 2),
+                        child: Image.asset('assets/icons/chevron.png'))),
               )
             ],
           ),

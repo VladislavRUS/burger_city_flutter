@@ -1,5 +1,6 @@
 import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:burger_city_flutter/models/burger.dart';
+import 'package:burger_city_flutter/models/order.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 List<Burger> burgersList = [
@@ -20,6 +21,7 @@ List<Burger> burgersList = [
 class Store extends Model {
   bool shouldRemember = false;
   List<Burger> burgers = [];
+  Order currentOrder;
 
   toggleRemember() {
     shouldRemember = !shouldRemember;
@@ -31,6 +33,11 @@ class Store extends Model {
     await Future.delayed(Durations.REQUEST_DURATION);
     print('end fetch');
     burgers = burgersList;
+    notifyListeners();
+  }
+
+  makeOrderFromBurger(Burger burger) {
+    currentOrder = Order(burger);
     notifyListeners();
   }
 }
