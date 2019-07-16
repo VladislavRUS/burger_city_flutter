@@ -1,4 +1,6 @@
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/constants/durations.dart';
+import 'package:burger_city_flutter/screens/burgers/burgers.dart';
 import 'package:burger_city_flutter/screens/home/home.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -11,8 +13,9 @@ class AppScreen extends StatefulWidget {
 }
 
 class AppScreenState extends State<AppScreen> {
-  List<Widget> pages = [HomeScreen()];
-
+  List<Widget> pages = [HomeScreen(), BurgersScreen()];
+  PageController pageController = PageController();
+  PageView pageView;
   int currentPage = 0;
 
   Widget buildMenu() {
@@ -51,7 +54,12 @@ class AppScreenState extends State<AppScreen> {
       child: Container(
         child: Material(
           child: InkWell(
-            onTap: () {},
+            onTap: () {
+              setState(() {
+                currentPage = index;
+              });
+              pageController.jumpToPage(index);
+            },
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -65,6 +73,15 @@ class AppScreenState extends State<AppScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pageView = PageView(
+      controller: pageController,
+      children: <Widget>[HomeScreen(), BurgersScreen()],
     );
   }
 
@@ -92,6 +109,6 @@ class AppScreenState extends State<AppScreen> {
                     image: AssetImage('assets/logo-title.png'))),
           ),
         ),
-        body: pages[currentPage]);
+        body: pageView);
   }
 }

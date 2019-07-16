@@ -25,7 +25,7 @@ class LoginScreenState extends State<LoginScreen> {
   bool isLoading = false;
 
   static Store of(BuildContext context) =>
-      ScopedModel.of<Store>(context, rebuildOnChange: true);
+      ScopedModel.of<Store>(context);
 
   LoginScreenState({this.pageController});
 
