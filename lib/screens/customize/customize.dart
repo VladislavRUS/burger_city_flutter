@@ -1,6 +1,9 @@
 import 'package:burger_city_flutter/components/button.dart';
+import 'package:burger_city_flutter/components/custom_scaffold.dart';
+import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/components/quantity_button.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/models/burger_order.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -35,7 +38,13 @@ class CustomizeScreenState extends State<CustomizeScreen> {
 
   onAddToCart() async {
     showLoader();
-    await Future.delayed(Duration(seconds: 2));
+
+    Store store = of(context);
+    BurgerOrder burgerOrder = BurgerOrder(store.currentBurger);
+    burgerOrder.quantity = quantity;
+
+    await store.addToCart(burgerOrder);
+
     hideLoader();
     Navigator.of(context).pop();
   }
@@ -62,7 +71,7 @@ class CustomizeScreenState extends State<CustomizeScreen> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 4),
-            child: Text(store.currentOrder.burger.name,
+            child: Text(store.currentBurger.name,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -82,10 +91,10 @@ class CustomizeScreenState extends State<CustomizeScreen> {
               Expanded(
                 child: Container(
                   height: 150,
-                  decoration: BoxDecoration(
-                      image: DecorationImage(
-                          image: AssetImage(store.currentOrder.burger.imageUrl),
-                          fit: BoxFit.contain)),
+                  child: Hero(
+                    tag: store.currentBurger.id.toString(),
+                    child: Image.asset(store.currentBurger.imageUrl),
+                  ),
                 ),
               )
             ],
@@ -119,42 +128,12 @@ class CustomizeScreenState extends State<CustomizeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-            icon: Icon(
-              Icons.arrow_back,
-              color: AppColors.MAIN_COLOR,
-            ),
-            onPressed: () {
-              Navigator.of(context).pop();
-            }),
-        backgroundColor: Colors.white,
-        centerTitle: true,
-        title: Container(
-          width: 66,
-          height: 22,
-          decoration: BoxDecoration(
-              image: DecorationImage(
-                  fit: BoxFit.fill,
-                  image: AssetImage('assets/logo-title.png'))),
-        ),
-        actions: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: 20),
-            width: 19,
-            height: 18,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/icons/cart.png'))),
-          )
-        ],
-      ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[buildHeader(), buildButtons()],
-        ),
-      ),
-    );
+    return CustomScaffold(
+        leading: LeadingIconBack(),
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[buildHeader(), buildButtons()],
+          ),
+        ));
   }
 }

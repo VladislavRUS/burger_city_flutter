@@ -1,5 +1,6 @@
 import 'package:burger_city_flutter/constants/routes.dart';
 import 'package:burger_city_flutter/screens/app/app.dart';
+import 'package:burger_city_flutter/screens/cart/cart.dart';
 import 'package:burger_city_flutter/screens/customize/customize.dart';
 import 'package:burger_city_flutter/screens/intro/intro.dart';
 import 'package:burger_city_flutter/store/store.dart';
@@ -23,6 +24,7 @@ class MyApp extends StatelessWidget {
         Routes.INTRO: (_) => IntroScreen(),
         Routes.APP: (_) => AppScreen(),
         Routes.CUSTOMIZE: (_) => CustomizeScreen(),
+        Routes.CART: (_) => CartScreen(),
       },
     );
   }

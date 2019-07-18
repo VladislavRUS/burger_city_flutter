@@ -24,12 +24,12 @@ class HomeScreenState extends State<HomeScreen> {
   int currentHeaderPage = 0;
   Timer headerTimer;
   List<String> offers = [
-    'assets/offers/1.png',
-    'assets/offers/2.png',
-    'assets/offers/3.png',
-    'assets/offers/1.png',
-    'assets/offers/2.png',
-    'assets/offers/3.png',
+    'assets/offers/offer1.png',
+    'assets/offers/offer2.png',
+    'assets/offers/offer3.png',
+    'assets/offers/offer1.png',
+    'assets/offers/offer2.png',
+    'assets/offers/offer3.png',
   ];
 
   Widget buildHeader() {

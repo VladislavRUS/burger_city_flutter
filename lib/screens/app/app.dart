@@ -1,3 +1,5 @@
+import 'package:burger_city_flutter/components/cart_button.dart';
+import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/screens/burgers/burgers.dart';
 import 'package:burger_city_flutter/screens/home/home.dart';
@@ -79,6 +81,7 @@ class AppScreenState extends State<AppScreen> {
   void initState() {
     super.initState();
     pageView = PageView(
+      physics: NeverScrollableScrollPhysics(),
       controller: pageController,
       children: <Widget>[HomeScreen(), BurgersScreen()],
     );
@@ -86,38 +89,6 @@ class AppScreenState extends State<AppScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        bottomNavigationBar: buildMenu(),
-        appBar: AppBar(
-          leading: Container(
-            margin: EdgeInsets.only(left: 20),
-            width: 45,
-            height: 27,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    image: AssetImage('assets/lang-title.png'))),
-          ),
-          backgroundColor: Colors.white,
-          centerTitle: true,
-          title: Container(
-            width: 66,
-            height: 22,
-            decoration: BoxDecoration(
-                image: DecorationImage(
-                    fit: BoxFit.fill,
-                    image: AssetImage('assets/logo-title.png'))),
-          ),
-          actions: <Widget>[
-            Container(
-              margin: EdgeInsets.only(right: 20),
-              width: 19,
-              height: 18,
-              decoration: BoxDecoration(
-                  image: DecorationImage(
-                      image: AssetImage('assets/icons/cart.png'))),
-            )
-          ],
-        ),
-        body: pageView);
+    return CustomScaffold(body: pageView, bottomNavigationBar: buildMenu());
   }
 }

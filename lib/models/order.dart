@@ -1,7 +1,9 @@
-import 'burger.dart';
+import 'package:burger_city_flutter/models/burger_order.dart';
 
 class Order {
-  Burger burger;
+  List<BurgerOrder> burgerOrders;
 
-  Order(this.burger);
+  Order() {
+    burgerOrders = [];
+  }
 }

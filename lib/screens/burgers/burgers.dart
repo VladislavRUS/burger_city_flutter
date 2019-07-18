@@ -1,4 +1,5 @@
 import 'package:burger_city_flutter/components/custom_chip.dart';
+import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/constants/routes.dart';
@@ -58,16 +59,18 @@ class BurgersScreenState extends State<BurgersScreen> {
     Store store = of(context);
 
     return ListView.builder(
-        padding: EdgeInsets.only(left: 20, right: 20, top: 32, bottom: 32),
+        padding: EdgeInsets.only(left: 20, right: 20, top: 20, bottom: 20),
         itemCount: store.burgers.length,
         itemBuilder: (context, index) {
-          return buildListItem(store.burgers[index]);
+          bool isLast = index == store.burgers.length - 1;
+
+          return buildListItem(store.burgers[index], isLast);
         });
   }
 
-  Widget buildListItem(Burger burger) {
+  Widget buildListItem(Burger burger, bool isLast) {
     return Container(
-      margin: EdgeInsets.only(bottom: 14),
+      margin: EdgeInsets.only(bottom: isLast ? 0 : 14),
       height: 86,
       decoration: BoxDecoration(boxShadow: <BoxShadow>[
         BoxShadow(
@@ -81,7 +84,7 @@ class BurgersScreenState extends State<BurgersScreen> {
         child: InkWell(
           onTap: () {
             Store store = of(context);
-            store.makeOrderFromBurger(burger);
+            store.setCurrentBurger(burger);
             Navigator.of(context).pushNamed(Routes.CUSTOMIZE);
           },
           child: Row(
@@ -90,8 +93,10 @@ class BurgersScreenState extends State<BurgersScreen> {
                 margin: EdgeInsets.only(right: 4),
                 width: 80,
                 height: 50,
-                decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage(burger.imageUrl))),
+                child: Hero(
+                  tag: burger.id.toString(),
+                  child: Image.asset(burger.imageUrl),
+                ),
               ),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
