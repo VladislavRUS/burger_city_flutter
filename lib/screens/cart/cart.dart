@@ -4,6 +4,7 @@ import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/constants/durations.dart';
+import 'package:burger_city_flutter/constants/routes.dart';
 import 'package:burger_city_flutter/models/burger_order.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
@@ -189,9 +190,7 @@ class CartScreenState extends State<CartScreen> {
   }
 
   onCheckout() async {
-    showLoader();
-    await Future.delayed(Durations.REQUEST_DURATION);
-    hideLoader();
+    Navigator.of(context).pushNamed(Routes.DELIVERY_DETAILS);
   }
 
   showLoader() {
