@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: Routes.INTRO,
+      initialRoute: Routes.APP,
       routes: {
         Routes.INTRO: (_) => IntroScreen(),
         Routes.APP: (_) => AppScreen(),
