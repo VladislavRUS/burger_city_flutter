@@ -1,19 +1,21 @@
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/info_panel.dart';
+import 'package:burger_city_flutter/components/info_panel_text.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/components/select_button.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/constants/routes.dart';
 import 'package:flutter/material.dart';
 
-class DeliveryDetails extends StatefulWidget {
+class DeliveryDetailsScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return DeliveryDetailsState();
+    return DeliveryDetailsScreenState();
   }
 }
 
-class DeliveryDetailsState extends State<DeliveryDetails> {
+class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
   final List<SelectButtonOption> options = [
     SelectButtonOption(name: 'Order now', value: 'now'),
     SelectButtonOption(name: 'Order in advance', value: 'advance')
@@ -61,7 +63,11 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
           Container(
               margin: EdgeInsets.only(bottom: 20),
               child: buildTitleText('Delivery Address')),
-          InfoPanel('No. 02, 6th Lane, Colombo 03')
+          InfoPanel(
+            child: Row(
+              children: <Widget>[InfoPanelText('No. 02, 6th Lane, Colombo 03')],
+            ),
+          )
         ],
       ),
     );
@@ -97,7 +103,13 @@ class DeliveryDetailsState extends State<DeliveryDetails> {
           Container(
               margin: EdgeInsets.only(bottom: 20),
               child: buildRegularText('Please select delivary Date & Time')),
-          InfoPanel('Delivery Date & Time')
+          InfoPanel(
+              child: Row(
+                children: <Widget>[InfoPanelText('Delivery Date & Time')],
+              ),
+              onTap: () {
+                Navigator.of(context).pushNamed(Routes.DATE_AND_TIME);
+              })
         ],
       ),
     );

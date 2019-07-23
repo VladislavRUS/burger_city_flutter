@@ -1,10 +1,10 @@
-import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class InfoPanel extends StatelessWidget {
-  final String text;
+  final Widget child;
+  final Function onTap;
 
-  InfoPanel(this.text);
+  InfoPanel({ this.child, this.onTap });
 
   @override
   Widget build(BuildContext context) {
@@ -18,19 +18,11 @@ class InfoPanel extends StatelessWidget {
         child: Material(
           color: Colors.white,
           child: InkWell(
-            onTap: () {},
+            onTap: onTap,
             child: Container(
               height: 52,
               padding: EdgeInsets.only(left: 22, right: 22),
-              child: Row(
-                children: <Widget>[
-                  Text(text,
-                      style: (TextStyle(
-                          fontSize: 13,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.MAIN_DARK_COLOR))),
-                ],
-              ),
+              child: child,
             ),
           ),
         ),
