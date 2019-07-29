@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:burger_city_flutter/constants/routes.dart';
+import 'package:burger_city_flutter/screens/address/address.dart';
 import 'package:burger_city_flutter/screens/app/app.dart';
 import 'package:burger_city_flutter/screens/cart/cart.dart';
 import 'package:burger_city_flutter/screens/customize/customize.dart';
@@ -7,12 +10,15 @@ import 'package:burger_city_flutter/screens/delivery_details/delivery_details.da
 import 'package:burger_city_flutter/screens/intro/intro.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-import 'constants/app_colors.dart';
+import 'models/config.dart';
 
-void main() {
-  Store store = Store();
+main() async {
+  String config = await rootBundle.loadString('assets/config.json');
+  Store store = Store(config: Config.fromJson(jsonDecode(config)));
+
   runApp(ScopedModel(
     child: MyApp(),
     model: store,
@@ -31,6 +37,7 @@ class MyApp extends StatelessWidget {
         Routes.CART: (_) => CartScreen(),
         Routes.DELIVERY_DETAILS: (_) => DeliveryDetailsScreen(),
         Routes.DATE_AND_TIME: (_) => DateAndTimeScreen(),
+        Routes.ADDRESS: (_) => AddressScreen(),
       },
     );
   }

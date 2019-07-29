@@ -1,9 +1,11 @@
 import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:burger_city_flutter/models/burger.dart';
 import 'package:burger_city_flutter/models/burger_order.dart';
+import 'package:burger_city_flutter/models/config.dart';
 import 'package:burger_city_flutter/models/order.dart';
-import 'package:flutter/src/material/time.dart';
+import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
+import 'package:requests/requests.dart';
 
 List<Burger> burgersList = [
   Burger(1, 'assets/burgers/burger1.png', 'Chiken Big Burger', 380),
@@ -21,10 +23,18 @@ List<Burger> burgersList = [
 ];
 
 class Store extends Model {
-  bool shouldRemember = false;
+  bool shouldRemember;
   List<Burger> burgers = [];
   Burger currentBurger;
-  Order order = Order();
+  Order order;
+  Config config;
+
+  Store({this.config}) {
+    order = Order();
+    burgers = [];
+    shouldRemember = false;
+    print(this.config.apiKey);
+  }
 
   toggleRemember() {
     shouldRemember = !shouldRemember;
@@ -58,5 +68,19 @@ class Store extends Model {
     order.dateTime = DateTime(orderDateTime.year, orderDateTime.month,
         orderDateTime.day, timeOfDay.hour, timeOfDay.minute);
     notifyListeners();
+  }
+
+  Future<List<String>> findPlace(String input) async {
+    String url =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=${config.apiKey}';
+    var jsonMap = await Requests.get(url, json: true);
+
+    List<String> descriptions = [];
+
+    jsonMap["predictions"].forEach((prediction) {
+      descriptions.add(prediction["description"]);
+    });
+
+    return descriptions;
   }
 }

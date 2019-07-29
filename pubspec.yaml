@@ -26,6 +26,7 @@ dependencies:
   scoped_model: 1.0.1
   flutter_svg: 0.13.1
   intl: 0.15.8
+  requests: ^2.0.1
 
 dev_dependencies:
   flutter_test:

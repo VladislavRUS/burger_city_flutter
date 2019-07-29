@@ -5,8 +5,19 @@ class Input extends StatelessWidget {
   IconData iconData;
   String placeholder;
   bool isObscured;
+  Function onChanged;
 
-  Input({this.iconData, this.placeholder, this.isObscured = false});
+  Input(
+      {this.iconData,
+      this.placeholder,
+      this.isObscured = false,
+      this.onChanged});
+
+  onTextChanged(String text) {
+    if (onChanged != null) {
+      onChanged(text);
+    }
+  }
 
   Widget buildIcon() {
     if (iconData == null) {
@@ -26,6 +37,7 @@ class Input extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(left: 15),
         child: TextField(
+          onChanged: onTextChanged,
           obscureText: this.isObscured,
           style: TextStyle(
               fontSize: 14,

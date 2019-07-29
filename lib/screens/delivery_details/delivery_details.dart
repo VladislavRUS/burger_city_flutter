@@ -80,6 +80,9 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                 )
               ],
             ),
+            onTap: () {
+              Navigator.of(context).pushNamed(Routes.ADDRESS);
+            },
           )
         ],
       ),
