@@ -2,6 +2,7 @@ import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:burger_city_flutter/models/burger.dart';
 import 'package:burger_city_flutter/models/burger_order.dart';
 import 'package:burger_city_flutter/models/order.dart';
+import 'package:flutter/src/material/time.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 List<Burger> burgersList = [
@@ -44,6 +45,18 @@ class Store extends Model {
   Future addToCart(BurgerOrder burgerOrder) async {
     await Future.delayed(Durations.REQUEST_DURATION);
     order.burgerOrders.add(burgerOrder);
+    notifyListeners();
+  }
+
+  setOrderDate(DateTime dateTime) {
+    order.dateTime = dateTime;
+    notifyListeners();
+  }
+
+  setOrderTime(TimeOfDay timeOfDay) {
+    DateTime orderDateTime = order.dateTime;
+    order.dateTime = DateTime(orderDateTime.year, orderDateTime.month,
+        orderDateTime.day, timeOfDay.hour, timeOfDay.minute);
     notifyListeners();
   }
 }

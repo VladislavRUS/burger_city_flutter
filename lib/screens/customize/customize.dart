@@ -129,6 +129,7 @@ class CustomizeScreenState extends State<CustomizeScreen> {
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
+        showCartButton: false,
         leading: LeadingIconBack(),
         body: SingleChildScrollView(
           child: Column(

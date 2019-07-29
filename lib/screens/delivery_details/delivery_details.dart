@@ -6,7 +6,10 @@ import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/components/select_button.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/constants/routes.dart';
+import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class DeliveryDetailsScreen extends StatefulWidget {
   @override
@@ -16,6 +19,8 @@ class DeliveryDetailsScreen extends StatefulWidget {
 }
 
 class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
+  static Store of(context) => ScopedModel.of<Store>(context);
+
   final List<SelectButtonOption> options = [
     SelectButtonOption(name: 'Order now', value: 'now'),
     SelectButtonOption(name: 'Order in advance', value: 'advance')
@@ -65,7 +70,15 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
               child: buildTitleText('Delivery Address')),
           InfoPanel(
             child: Row(
-              children: <Widget>[InfoPanelText('No. 02, 6th Lane, Colombo 03')],
+              children: <Widget>[
+                InfoPanelText('No. 02, 6th Lane, Colombo 03'),
+                Spacer(),
+                Icon(
+                  Icons.edit,
+                  color: AppColors.DARK_ICON_COLOR,
+                  size: 18,
+                )
+              ],
             ),
           )
         ],
@@ -94,6 +107,16 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       return null;
     }
 
+    Store store = of(context);
+    String dateTimeMsg;
+
+    if (store.order.dateTime == null) {
+      dateTimeMsg = 'Delivery Date & Time';
+    } else {
+      var format = DateFormat('dd.MM.yyyy HH:mm');
+      dateTimeMsg = format.format(store.order.dateTime);
+    }
+
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
@@ -102,10 +125,18 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
           buildTitleText('Delivery Date & Time'),
           Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: buildRegularText('Please select delivary Date & Time')),
+              child: buildRegularText('Please select delivery Date & Time')),
           InfoPanel(
               child: Row(
-                children: <Widget>[InfoPanelText('Delivery Date & Time')],
+                children: <Widget>[
+                  InfoPanelText(dateTimeMsg),
+                  Spacer(),
+                  Icon(
+                    Icons.edit,
+                    color: AppColors.DARK_ICON_COLOR,
+                    size: 18,
+                  )
+                ],
               ),
               onTap: () {
                 Navigator.of(context).pushNamed(Routes.DATE_AND_TIME);
@@ -124,17 +155,23 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
     return CustomScaffold(
       leading: LeadingIconBack(),
       showCartButton: false,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            buildOrderType(),
-            buildAddress(),
-            buildDateAndTime(),
-            buildButton()
-          ].where((widget) => widget != null).toList(),
-        ),
+      body: Stack(
+        children: <Widget>[
+          Positioned.fill(
+            child: SingleChildScrollView(
+              padding: EdgeInsets.all(20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  buildOrderType(),
+                  buildAddress(),
+                  buildDateAndTime(),
+                ].where((widget) => widget != null).toList(),
+              ),
+            ),
+          ),
+          Positioned(bottom: 20, left: 20, right: 20, child: buildButton())
+        ],
       ),
     );
   }

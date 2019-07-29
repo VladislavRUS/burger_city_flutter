@@ -6,6 +6,5 @@ class Order {
 
   Order() {
     burgerOrders = [];
-    dateTime = DateTime.now().add(Duration(hours: 1));
   }
 }

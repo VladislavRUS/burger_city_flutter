@@ -9,6 +9,8 @@ import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import 'constants/app_colors.dart';
+
 void main() {
   Store store = Store();
   runApp(ScopedModel(
