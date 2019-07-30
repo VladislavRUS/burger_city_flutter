@@ -26,20 +26,30 @@ class AddressScreenState extends State<AddressScreen> {
       List<String> foundDescriptions = await store.findPlace(text);
       setState(() {
         descriptions = foundDescriptions;
+        print(foundDescriptions.length);
       });
     });
   }
 
   Widget buildList() {
+    Store store = of(context);
+
     return ListView.builder(
         itemCount: descriptions.length,
         itemBuilder: (context, index) {
-          return ListTile(title: Text(descriptions[index]));
+          var address = descriptions[index];
+
+          return ListTile(onTap: () {
+            store.setAddress(address);
+            Navigator.of(context).pop();
+          },title: Text(address));
         });
   }
 
   @override
   Widget build(BuildContext context) {
+    Store store = of(context);
+
     return CustomScaffold(
       leading: LeadingIconBack(),
       body: Container(
@@ -47,6 +57,8 @@ class AddressScreenState extends State<AddressScreen> {
         child: Stack(
           children: <Widget>[
             Input(
+              placeholder: store.order.address,
+              iconData: Icons.search,
               onChanged: onChanged,
             ),
             Container(margin: EdgeInsets.only(top: 50), child: buildList())

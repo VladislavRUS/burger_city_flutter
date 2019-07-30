@@ -54,16 +54,25 @@ class Input extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(6),
-      child: Container(
-        height: 48,
-        color: Colors.white,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[buildIcon(), buildTextField()]
-              .where((widget) => widget != null)
-              .toList(),
+    return Container(
+      decoration: BoxDecoration(boxShadow: <BoxShadow>[
+        BoxShadow(
+            color: Color.fromARGB(20, 0, 0, 0),
+            blurRadius: 5,
+            spreadRadius: 1,
+            offset: Offset(0, 2))
+      ]),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6),
+        child: Container(
+          height: 48,
+          color: Colors.white,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[buildIcon(), buildTextField()]
+                .where((widget) => widget != null)
+                .toList(),
+          ),
         ),
       ),
     );

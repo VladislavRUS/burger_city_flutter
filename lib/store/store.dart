@@ -33,7 +33,6 @@ class Store extends Model {
     order = Order();
     burgers = [];
     shouldRemember = false;
-    print(this.config.apiKey);
   }
 
   toggleRemember() {
@@ -82,5 +81,10 @@ class Store extends Model {
     });
 
     return descriptions;
+  }
+
+  setAddress(String address) {
+    order.address = address;
+    notifyListeners();
   }
 }

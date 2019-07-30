@@ -18,8 +18,11 @@ class DeliveryDetailsScreen extends StatefulWidget {
   }
 }
 
-class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
+class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
+    with SingleTickerProviderStateMixin {
   static Store of(context) => ScopedModel.of<Store>(context);
+  AnimationController controller;
+  Animation<double> animation;
 
   final List<SelectButtonOption> options = [
     SelectButtonOption(name: 'Order now', value: 'now'),
@@ -31,6 +34,12 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
   @override
   void initState() {
     super.initState();
+
+    controller =
+        AnimationController(duration: Duration(milliseconds: 150), vsync: this);
+    animation = Tween(begin: 0.0, end: 1.0)
+        .chain(CurveTween(curve: Curves.ease))
+        .animate(controller);
 
     selectedOption = options[0];
   }
@@ -56,10 +65,20 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       setState(() {
         selectedOption = option;
       });
+
+      if (controller.isCompleted) {
+        controller.reverse();
+      } else {
+        controller.forward();
+      }
     });
   }
 
   Widget buildAddress() {
+    Store store = of(context);
+
+    String addressText = store.order.address ?? 'Delivery Address';
+
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       child: Column(
@@ -71,8 +90,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
           InfoPanel(
             child: Row(
               children: <Widget>[
-                InfoPanelText('No. 02, 6th Lane, Colombo 03'),
-                Spacer(),
+                Expanded(child: InfoPanelText(addressText)),
                 Icon(
                   Icons.edit,
                   color: AppColors.DARK_ICON_COLOR,
@@ -106,10 +124,6 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
   }
 
   Widget buildDateAndTime() {
-    if (this.selectedOption.value == 'now') {
-      return null;
-    }
-
     Store store = of(context);
     String dateTimeMsg;
 
@@ -120,31 +134,34 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
       dateTimeMsg = format.format(store.order.dateTime);
     }
 
-    return Container(
-      margin: EdgeInsets.only(bottom: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          buildTitleText('Delivery Date & Time'),
-          Container(
-              margin: EdgeInsets.only(bottom: 20),
-              child: buildRegularText('Please select delivery Date & Time')),
-          InfoPanel(
-              child: Row(
-                children: <Widget>[
-                  InfoPanelText(dateTimeMsg),
-                  Spacer(),
-                  Icon(
-                    Icons.edit,
-                    color: AppColors.DARK_ICON_COLOR,
-                    size: 18,
-                  )
-                ],
-              ),
-              onTap: () {
-                Navigator.of(context).pushNamed(Routes.DATE_AND_TIME);
-              })
-        ],
+    return AbsorbPointer(
+      absorbing: selectedOption.value == 'now',
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            buildTitleText('Delivery Date & Time'),
+            Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: buildRegularText('Please select delivery Date & Time')),
+            InfoPanel(
+                child: Row(
+                  children: <Widget>[
+                    InfoPanelText(dateTimeMsg),
+                    Spacer(),
+                    Icon(
+                      Icons.edit,
+                      color: AppColors.DARK_ICON_COLOR,
+                      size: 18,
+                    )
+                  ],
+                ),
+                onTap: () {
+                  Navigator.of(context).pushNamed(Routes.DATE_AND_TIME);
+                })
+          ],
+        ),
       ),
     );
   }
@@ -168,7 +185,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen> {
                 children: <Widget>[
                   buildOrderType(),
                   buildAddress(),
-                  buildDateAndTime(),
+                  FadeTransition(child: buildDateAndTime(), opacity: animation),
                 ].where((widget) => widget != null).toList(),
               ),
             ),

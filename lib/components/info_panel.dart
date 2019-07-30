@@ -4,7 +4,7 @@ class InfoPanel extends StatelessWidget {
   final Widget child;
   final Function onTap;
 
-  InfoPanel({ this.child, this.onTap });
+  InfoPanel({this.child, this.onTap});
 
   @override
   Widget build(BuildContext context) {

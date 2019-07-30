@@ -8,12 +8,17 @@ class InfoPanelText extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w500,
-          color: AppColors.MAIN_DARK_COLOR),
+    return Container(
+      padding: EdgeInsets.only(right: 10),
+      child: Text(
+        text,
+        overflow: TextOverflow.fade,
+        softWrap: false,
+        style: TextStyle(
+            fontSize: 13,
+            fontWeight: FontWeight.w500,
+            color: AppColors.MAIN_DARK_COLOR),
+      ),
     );
   }
 }
