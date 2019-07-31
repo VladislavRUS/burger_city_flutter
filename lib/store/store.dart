@@ -1,4 +1,5 @@
 import 'package:burger_city_flutter/constants/durations.dart';
+import 'package:burger_city_flutter/models/address_description.dart';
 import 'package:burger_city_flutter/models/burger.dart';
 import 'package:burger_city_flutter/models/burger_order.dart';
 import 'package:burger_city_flutter/models/config.dart';
@@ -69,22 +70,34 @@ class Store extends Model {
     notifyListeners();
   }
 
-  Future<List<String>> findPlace(String input) async {
+  Future<List<AddressDescription>> findPlace(String input) async {
     String url =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$input&key=${config.apiKey}';
     var jsonMap = await Requests.get(url, json: true);
 
-    List<String> descriptions = [];
+    List<AddressDescription> descriptions = [];
 
     jsonMap["predictions"].forEach((prediction) {
-      descriptions.add(prediction["description"]);
+      print(prediction);
+      bool isValid = prediction["types"].firstWhere((elem) => elem == 'street_address', orElse: () => null) != null;
+      descriptions.add(AddressDescription(id: prediction["id"], title: prediction["description"], isValid: isValid));
     });
 
     return descriptions;
   }
 
-  setAddress(String address) {
+  setAddress(AddressDescription address) {
     order.address = address;
     notifyListeners();
+  }
+
+  int getTotalPrice() {
+    int sum = 0;
+
+    order.burgerOrders.forEach((burgerOrder) {
+      sum += burgerOrder.burger.price;
+    });
+
+    return sum;
   }
 }

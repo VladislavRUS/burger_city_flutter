@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
+import 'package:burger_city_flutter/models/address_description.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -16,17 +17,16 @@ class AddressScreen extends StatefulWidget {
 
 class AddressScreenState extends State<AddressScreen> {
   static Store of(context) => ScopedModel.of<Store>(context);
-  List<String> descriptions = [];
+  List<AddressDescription> descriptions = [];
   Timer timer;
 
   onChanged(String text) async {
     if (timer?.isActive ?? false) timer.cancel();
     timer = Timer(const Duration(milliseconds: 500), () async {
       Store store = of(context);
-      List<String> foundDescriptions = await store.findPlace(text);
+      List<AddressDescription> foundDescriptions = await store.findPlace(text);
       setState(() {
         descriptions = foundDescriptions;
-        print(foundDescriptions.length);
       });
     });
   }
@@ -39,10 +39,17 @@ class AddressScreenState extends State<AddressScreen> {
         itemBuilder: (context, index) {
           var address = descriptions[index];
 
-          return ListTile(onTap: () {
-            store.setAddress(address);
-            Navigator.of(context).pop();
-          },title: Text(address));
+          return AbsorbPointer(
+            absorbing: !address.isValid,
+            child: ListTile(
+                onTap: () {
+                  store.setAddress(address);
+                  Navigator.of(context).pop();
+                },
+                title: Opacity(
+                    opacity: address.isValid ? 1 : 0.6,
+                    child: Text(address.title))),
+          );
         });
   }
 
@@ -57,7 +64,7 @@ class AddressScreenState extends State<AddressScreen> {
         child: Stack(
           children: <Widget>[
             Input(
-              placeholder: store.order.address,
+              placeholder: store.order?.address?.title ?? 'Search',
               iconData: Icons.search,
               onChanged: onChanged,
             ),

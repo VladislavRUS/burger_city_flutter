@@ -2,6 +2,7 @@ import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
+import 'package:burger_city_flutter/components/order_items.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:burger_city_flutter/constants/routes.dart';
@@ -21,16 +22,6 @@ class CartScreenState extends State<CartScreen> {
   static Store of(context) => ScopedModel.of(context, rebuildOnChange: true);
 
   bool isLoading = false;
-
-  int getPrice(List<BurgerOrder> burgerOrders) {
-    int sum = 0;
-
-    burgerOrders.forEach((burgerOrder) {
-      sum += burgerOrder.burger.price;
-    });
-
-    return sum;
-  }
 
   Widget buildHeader() {
     Store store = of(context);
@@ -56,7 +47,7 @@ class CartScreenState extends State<CartScreen> {
           Container(
             margin: EdgeInsets.only(right: 14),
             child: Text(
-              '${getPrice(store.order.burgerOrders).toString()} \$',
+              '${store.getTotalPrice()} \$',
               style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w700,
@@ -90,78 +81,8 @@ class CartScreenState extends State<CartScreen> {
             margin: EdgeInsets.only(bottom: 18),
             child: titleText('Includes'),
           ),
-          ...store.order.burgerOrders.map((burgerOrder) {
-            return buildOrder(burgerOrder);
-          }).toList()
-        ],
-      ),
-    );
-  }
-
-  Widget buildOrder(BurgerOrder burgerOrder) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 24),
-      decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-                color: Color.fromARGB(20, 0, 0, 0),
-                spreadRadius: 8,
-                blurRadius: 15)
-          ],
-          borderRadius: BorderRadius.circular(6)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: <Widget>[
-          Row(
-            children: <Widget>[
-              Container(
-                margin: EdgeInsets.only(left: 10),
-                width: 125,
-                height: 125,
-                child: Image.asset(burgerOrder.burger.imageUrl),
-              ),
-              Container(
-                margin: EdgeInsets.only(left: 20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.only(bottom: 4),
-                      child: Text(
-                        '${burgerOrder.quantity} ${burgerOrder.burger.name}',
-                        style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: AppColors.MAIN_DARK_COLOR),
-                      ),
-                    ),
-                    Text(
-                      '${burgerOrder.burger.name}',
-                      style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.DARK_ICON_COLOR),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                padding: EdgeInsets.only(bottom: 15, right: 15),
-                child: Text(
-                  '${burgerOrder.burger.price.toString()} \$',
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.MAIN_COLOR),
-                ),
-              )
-            ],
+          OrderItems(
+            order: store.order,
           )
         ],
       ),

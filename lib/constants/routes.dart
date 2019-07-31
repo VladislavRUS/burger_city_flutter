@@ -6,4 +6,5 @@ class Routes {
   static const String DELIVERY_DETAILS = '/deliveryDetails';
   static const String DATE_AND_TIME = '/dateAndTime';
   static const String ADDRESS = '/address';
+  static const String ORDER = '/order';
 }

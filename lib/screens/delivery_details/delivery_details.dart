@@ -77,7 +77,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   Widget buildAddress() {
     Store store = of(context);
 
-    String addressText = store.order.address ?? 'Delivery Address';
+    String addressText = store.order?.address?.title ?? 'Delivery Address';
 
     return Container(
       margin: EdgeInsets.only(bottom: 20),
@@ -167,7 +167,9 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   }
 
   Widget buildButton() {
-    return Button(text: 'Proceed to Order');
+    return Button(text: 'Proceed to Order', onTap: () {
+      Navigator.of(context).pushNamed(Routes.ORDER);
+    });
   }
 
   @override
