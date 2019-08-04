@@ -111,6 +111,10 @@ class CartScreenState extends State<CartScreen> {
   }
 
   onCheckout() async {
+    Store store = of(context);
+    var now = DateTime.now();
+    store.setOrderDate(now);
+    store.setOrderTime(TimeOfDay(hour: now.hour + 1, minute: now.minute));
     Navigator.of(context).pushNamed(Routes.DELIVERY_DETAILS);
   }
 

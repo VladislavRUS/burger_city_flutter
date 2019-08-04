@@ -1,5 +1,6 @@
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import 'custom_chip.dart';
 
@@ -10,15 +11,21 @@ class QuantityButton extends StatelessWidget {
 
   QuantityButton(this.value, this.onDec, this.onInc);
 
-  Widget buildChipButton(String text, Function onTap) {
-    return Material(
-      child: InkWell(
-        onTap: onTap,
-        child: CustomChip(
-            child: Text(
-          text,
-          style: TextStyle(fontSize: 14, color: AppColors.DARK_ICON_COLOR),
-        )),
+  Widget buildChipButton(SvgPicture svgPicture, Function onTap) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Material(
+        color: Color.fromARGB(51, 114, 124, 142),
+        child: InkWell(
+          onTap: onTap,
+          child: Container(
+            width: 20,
+            height: 20,
+            child: Center(
+              child: svgPicture,
+            ),
+          ),
+        ),
       ),
     );
   }
@@ -37,13 +44,26 @@ class QuantityButton extends StatelessWidget {
       padding: EdgeInsets.only(left: 14, right: 14),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          buildChipButton('-', onDec),
+          buildChipButton(
+              SvgPicture.asset(
+                'assets/icons/minus.svg',
+                color: AppColors.DARK_ICON_COLOR,
+              ),
+              onDec),
           Text(
             value,
             style: TextStyle(fontSize: 14, color: AppColors.DARK_ICON_COLOR),
           ),
-          buildChipButton('+', onInc),
+          buildChipButton(
+              SvgPicture.asset(
+                'assets/icons/plus.svg',
+                width: 10,
+                height: 10,
+                color: AppColors.DARK_ICON_COLOR,
+              ),
+              onInc),
         ],
       ),
     );

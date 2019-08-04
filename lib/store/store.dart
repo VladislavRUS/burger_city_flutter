@@ -4,6 +4,7 @@ import 'package:burger_city_flutter/models/burger.dart';
 import 'package:burger_city_flutter/models/burger_order.dart';
 import 'package:burger_city_flutter/models/config.dart';
 import 'package:burger_city_flutter/models/order.dart';
+import 'package:burger_city_flutter/models/order_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 import 'package:requests/requests.dart';
@@ -29,6 +30,7 @@ class Store extends Model {
   Burger currentBurger;
   Order order;
   Config config;
+  OrderPayment orderPayment;
 
   Store({this.config}) {
     order = Order();
@@ -99,5 +101,10 @@ class Store extends Model {
     });
 
     return sum;
+  }
+
+  setOrderPayment(OrderPayment payment) {
+    orderPayment = payment;
+    notifyListeners();
   }
 }

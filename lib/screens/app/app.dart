@@ -2,7 +2,10 @@ import 'package:burger_city_flutter/components/cart_button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/screens/burgers/burgers.dart';
+import 'package:burger_city_flutter/screens/favourites/favourites.dart';
 import 'package:burger_city_flutter/screens/home/home.dart';
+import 'package:burger_city_flutter/screens/track_orders/track_orders.dart';
+import 'package:burger_city_flutter/screens/wallet/wallet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -14,7 +17,13 @@ class AppScreen extends StatefulWidget {
 }
 
 class AppScreenState extends State<AppScreen> {
-  List<Widget> pages = [HomeScreen(), BurgersScreen()];
+  List<Widget> pages = [
+    HomeScreen(),
+    BurgersScreen(),
+    FavouritesScreen(),
+    TrackOrdersScreen(),
+    WalletScreen()
+  ];
   PageController pageController = PageController();
   PageView pageView;
   int currentPage = 0;
@@ -83,7 +92,7 @@ class AppScreenState extends State<AppScreen> {
     pageView = PageView(
       physics: NeverScrollableScrollPhysics(),
       controller: pageController,
-      children: <Widget>[HomeScreen(), BurgersScreen()],
+      children: pages,
     );
   }
 

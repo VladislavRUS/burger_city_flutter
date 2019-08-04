@@ -9,6 +9,7 @@ import 'package:burger_city_flutter/screens/date_and_time/date_and_time.dart';
 import 'package:burger_city_flutter/screens/delivery_details/delivery_details.dart';
 import 'package:burger_city_flutter/screens/intro/intro.dart';
 import 'package:burger_city_flutter/screens/order/order.dart';
+import 'package:burger_city_flutter/screens/wallet/wallet.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

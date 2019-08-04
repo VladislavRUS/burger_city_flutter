@@ -153,6 +153,15 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
     );
   }
 
+  bool isProcessDisabled() {
+    Store store = of(context);
+    if (store.order.address == null || store.order.dateTime == null) {
+      return true;
+    }
+
+    return false;
+  }
+
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -195,6 +204,7 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
               text: 'Select',
               isLoading: false,
               onTap: onSelect,
+              isDisabled: isProcessDisabled(),
             ),
           )
         ],
