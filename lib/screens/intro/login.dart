@@ -9,6 +9,8 @@ import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+import '../../app_localizations.dart';
+
 class LoginScreen extends StatefulWidget {
   PageController pageController;
 
@@ -28,6 +30,10 @@ class LoginScreenState extends State<LoginScreen> {
       ScopedModel.of<Store>(context, rebuildOnChange: true);
 
   LoginScreenState({this.pageController});
+
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
 
   Widget buildLogo() {
     return Container(
@@ -53,18 +59,18 @@ class LoginScreenState extends State<LoginScreen> {
               child: Row(
                 children: <Widget>[
                   TextButtonCheckbox(
-                    text: 'Remember me',
+                    text: translate('login.rememberMe'),
                     isActive: store.shouldRemember,
                     onTap: store.toggleRemember,
                   ),
                   Spacer(),
-                  TextButton(text: 'Forgot password?', onTap: () {})
+                  TextButton(text: translate('login.forgot'), onTap: () {})
                 ],
               ),
             ),
             Button(
               isLoading: isLoading,
-              text: 'Log in',
+              text: translate('login.logIn'),
               onTap: onLogin,
             )
           ],
@@ -76,13 +82,13 @@ class LoginScreenState extends State<LoginScreen> {
       margin: EdgeInsets.only(bottom: 25),
       child: Column(
         children: <Widget>[
-          Text('Welcome Back!',
+          Text(translate('login.welcomeBack'),
               style: TextStyle(
                   fontSize: 22,
                   color: Colors.white,
                   fontWeight: FontWeight.w700)),
           Text(
-            'Login to continue Burger City',
+            translate('login.loginToContinue'),
             style: TextStyle(
                 fontSize: 16, color: Colors.white, fontWeight: FontWeight.w600),
           ),
@@ -105,7 +111,7 @@ class LoginScreenState extends State<LoginScreen> {
                 TextButton(
                   onTap: () {},
                   textColor: AppColors.MAIN_COLOR,
-                  text: 'New user? Sign up',
+                  text: translate('login.newUser'),
                 ),
               ],
             ),
@@ -116,7 +122,7 @@ class LoginScreenState extends State<LoginScreen> {
               Container(
                 width: 250,
                 child: Text(
-                  'By signing up you indicate that you have read and agreed to the Patch Terms of Service',
+                  translate('login.termsOfService'),
                   style: TextStyle(fontSize: 10, color: Colors.white),
                   textAlign: TextAlign.center,
                 ),
@@ -133,14 +139,14 @@ class LoginScreenState extends State<LoginScreen> {
       Container(
         margin: EdgeInsets.only(bottom: 18),
         child: Input(
-          placeholder: 'Email',
+          placeholder: translate('login.email'),
           iconData: Icons.alternate_email,
         ),
       ),
       Container(
         margin: EdgeInsets.only(bottom: 18),
         child: Input(
-          placeholder: 'Password',
+          placeholder: translate('login.password'),
           isObscured: true,
           iconData: Icons.lock_outline,
         ),

@@ -1,8 +1,10 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:burger_city_flutter/models/address_description.dart';
 import 'package:burger_city_flutter/models/burger.dart';
 import 'package:burger_city_flutter/models/burger_order.dart';
 import 'package:burger_city_flutter/models/config.dart';
+import 'package:burger_city_flutter/models/language.dart';
 import 'package:burger_city_flutter/models/order.dart';
 import 'package:burger_city_flutter/models/order_payment.dart';
 import 'package:flutter/material.dart';
@@ -31,6 +33,7 @@ class Store extends Model {
   Order order;
   Config config;
   OrderPayment orderPayment;
+  Locale locale;
 
   Store({this.config}) {
     order = Order();
@@ -81,8 +84,14 @@ class Store extends Model {
 
     jsonMap["predictions"].forEach((prediction) {
       print(prediction);
-      bool isValid = prediction["types"].firstWhere((elem) => elem == 'street_address', orElse: () => null) != null;
-      descriptions.add(AddressDescription(id: prediction["id"], title: prediction["description"], isValid: isValid));
+      bool isValid = prediction["types"].firstWhere(
+              (elem) => elem == 'street_address',
+              orElse: () => null) !=
+          null;
+      descriptions.add(AddressDescription(
+          id: prediction["id"],
+          title: prediction["description"],
+          isValid: isValid));
     });
 
     return descriptions;
@@ -105,6 +114,11 @@ class Store extends Model {
 
   setOrderPayment(OrderPayment payment) {
     orderPayment = payment;
+    notifyListeners();
+  }
+
+  setLocale(Locale loc) {
+    locale = loc;
     notifyListeners();
   }
 }

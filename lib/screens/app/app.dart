@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/cart_button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
@@ -39,7 +40,8 @@ class AppScreenState extends State<AppScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          buildNavigationBarIcon('assets/icons/home.svg', 0, 'Home'),
+          buildNavigationBarIcon('assets/icons/home.svg', 0,
+              AppLocalizations.of(context).translate('home')),
           buildNavigationBarIcon('assets/icons/burgers.svg', 1, 'Our Burgers'),
           buildNavigationBarIcon('assets/icons/star.svg', 2, 'Favourites'),
           buildNavigationBarIcon('assets/icons/track.svg', 3, 'Track Orders'),

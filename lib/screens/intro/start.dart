@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/big_text.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/constants/durations.dart';
@@ -20,6 +21,10 @@ class StartScreenState extends State<StartScreen> {
 
   StartScreenState({this.pageController});
 
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
+
   Widget buildLogo() {
     return Container(
       margin: EdgeInsets.only(top: 85),
@@ -34,8 +39,8 @@ class StartScreenState extends State<StartScreen> {
       children: <Widget>[
         Container(
             margin: EdgeInsets.only(bottom: 35, left: 30),
-            width: 120,
-            child: BigText('World`s Greatest Burgers.')),
+            width: 130,
+            child: BigText(translate('start.title'))),
       ],
     );
   }
@@ -44,7 +49,7 @@ class StartScreenState extends State<StartScreen> {
     return Container(
       margin: EdgeInsets.only(bottom: 80, left: 30, right: 30),
       child: Button(
-        text: 'Get start here',
+        text: translate('start.getStarted'),
         isLoading: isLoading,
         onTap: onStart,
       ),

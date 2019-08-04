@@ -1,0 +1,13 @@
+{
+  "start.title": "Самые лучшие бургеры в мире",
+  "start.getStarted": "Начать",
+  "login.rememberMe": "Запомнить меня",
+  "login.forgot": "Забыли пароль?",
+  "login.logIn": "Войти",
+  "login.welcomeBack": "Добро пожаловать!",
+  "login.loginToContinue": "Рады видеть Вас в Burger City",
+  "login.newUser": "Новый пользователь? Зарегестрироваться",
+  "login.termsOfService": "Регистрируясь, Вы соглашаетесь с правилами использования",
+  "login.email": "Почта",
+  "login.password": "Пароль"
+}
