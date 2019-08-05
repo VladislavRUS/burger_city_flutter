@@ -1,5 +1,4 @@
 import 'package:burger_city_flutter/app_localizations.dart';
-import 'package:burger_city_flutter/components/cart_button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/screens/burgers/burgers.dart';
@@ -29,6 +28,10 @@ class AppScreenState extends State<AppScreen> {
   PageView pageView;
   int currentPage = 0;
 
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
+
   Widget buildMenu() {
     return Container(
       decoration: BoxDecoration(color: Colors.white, boxShadow: <BoxShadow>[
@@ -40,12 +43,11 @@ class AppScreenState extends State<AppScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          buildNavigationBarIcon('assets/icons/home.svg', 0,
-              AppLocalizations.of(context).translate('home')),
-          buildNavigationBarIcon('assets/icons/burgers.svg', 1, 'Our Burgers'),
-          buildNavigationBarIcon('assets/icons/star.svg', 2, 'Favourites'),
-          buildNavigationBarIcon('assets/icons/track.svg', 3, 'Track Orders'),
-          buildNavigationBarIcon('assets/icons/wallet.svg', 4, 'Wallet'),
+          buildNavigationBarIcon('assets/icons/home.svg', 0, translate('app.home')),
+          buildNavigationBarIcon('assets/icons/burgers.svg', 1, translate('app.burgers')),
+          buildNavigationBarIcon('assets/icons/star.svg', 2, translate('app.favourites')),
+          buildNavigationBarIcon('assets/icons/track.svg', 3, translate('app.trackOrders')),
+          buildNavigationBarIcon('assets/icons/wallet.svg', 4, translate('app.wallet')),
         ],
       ),
     );

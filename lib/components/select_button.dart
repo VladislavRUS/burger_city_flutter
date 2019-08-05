@@ -16,10 +16,11 @@ class SelectButton extends StatelessWidget {
   SelectButton(this.options, this.selectedOption, this.onOptionSelect);
 
   Widget buildOption(SelectButtonOption option) {
+    bool isOptionSelected = selectedOption.value == option.value;
+
     return Expanded(
       child: Material(
-        color:
-            this.selectedOption == option ? AppColors.MAIN_COLOR : Colors.white,
+        color: isOptionSelected ? AppColors.MAIN_COLOR : Colors.white,
         child: InkWell(
           onTap: () {
             onOptionSelect(option);
@@ -30,7 +31,7 @@ class SelectButton extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
-                      color: this.selectedOption == option
+                      color: isOptionSelected
                           ? Colors.white
                           : AppColors.MAIN_DARK_COLOR)),
             ),

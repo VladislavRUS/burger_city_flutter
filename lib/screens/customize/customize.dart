@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
@@ -19,6 +20,10 @@ class CustomizeScreenState extends State<CustomizeScreen> {
   static Store of(context) => ScopedModel.of<Store>(context);
   int quantity = 1;
   bool isAddingToCard = false;
+
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
 
   inc() {
     setState(() {
@@ -80,7 +85,7 @@ class CustomizeScreenState extends State<CustomizeScreen> {
           Container(
               margin: EdgeInsets.only(bottom: 20),
               child: Text(
-                'Please customize your meal',
+                translate('customize.pleaseCustomize'),
                 style: TextStyle(
                     fontSize: 15,
                     color: AppColors.MAIN_DARK_COLOR,
@@ -117,7 +122,7 @@ class CustomizeScreenState extends State<CustomizeScreen> {
               margin: EdgeInsets.only(left: 8),
               width: 190,
               child: Button(
-                text: 'Add to card',
+                text: translate('customize.addToCart'),
                 onTap: onAddToCart,
                 isLoading: isAddingToCard,
               ))

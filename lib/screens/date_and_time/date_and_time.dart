@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/info_panel.dart';
@@ -7,7 +8,6 @@ import 'package:burger_city_flutter/components/title_text.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -23,6 +23,10 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
       ScopedModel.of<Store>(context, rebuildOnChange: true);
   DateTime dateTime;
   TimeOfDay timeOfDay;
+
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
 
   onSelect() {
     Store store = of(context);
@@ -76,7 +80,7 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
   }
 
   Widget buildDate() {
-    var format = DateFormat('dd / MM / yyyy');
+    var format = DateFormat(translate('dateAndTime.dateFormat'));
     String formattedDate = format.format(dateTime);
 
     return Container(
@@ -84,11 +88,11 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TitleText('Pickup Date'),
+          TitleText(translate('dateAndTime.pickupDate')),
           Container(
               margin: EdgeInsets.only(bottom: 16),
               child: Text(
-                'Please select Pickup Time',
+                translate('dateAndTime.selectDate'),
                 style: TextStyle(
                     fontSize: 15,
                     color: AppColors.MAIN_DARK_COLOR,
@@ -121,11 +125,11 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          TitleText('Pickup Time'),
+          TitleText(translate('dateAndTime.pickupTime')),
           Container(
               margin: EdgeInsets.only(bottom: 16),
               child: Text(
-                'Please select Pickup Time',
+                translate('dateAndTime.selectTime'),
                 style: TextStyle(
                     fontSize: 15,
                     color: AppColors.MAIN_DARK_COLOR,
@@ -151,15 +155,6 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
         ],
       ),
     );
-  }
-
-  bool isProcessDisabled() {
-    Store store = of(context);
-    if (store.order.address == null || store.order.dateTime == null) {
-      return true;
-    }
-
-    return false;
   }
 
   @override
@@ -201,10 +196,9 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
             bottom: 20,
             right: 20,
             child: Button(
-              text: 'Select',
+              text: translate('dateAndTime.select'),
               isLoading: false,
-              onTap: onSelect,
-              isDisabled: isProcessDisabled(),
+              onTap: onSelect
             ),
           )
         ],

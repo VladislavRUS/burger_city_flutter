@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/input.dart';
@@ -23,10 +24,12 @@ class CartScreenState extends State<CartScreen> {
 
   bool isLoading = false;
 
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
+
   Widget buildHeader() {
     Store store = of(context);
-
-    int length = store.order.burgerOrders.length;
 
     return Container(
       height: 90,
@@ -36,7 +39,7 @@ class CartScreenState extends State<CartScreen> {
           Container(
             margin: EdgeInsets.only(left: 20),
             child: Text(
-              'Sub Total ($length ${length > 1 ? 'items' : 'item'})',
+              translate('cart.subTotal'),
               style: TextStyle(
                   color: Colors.white,
                   fontSize: 18,
@@ -79,7 +82,7 @@ class CartScreenState extends State<CartScreen> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 18),
-            child: titleText('Includes'),
+            child: titleText(translate('cart.includes')),
           ),
           OrderItems(
             order: store.order,
@@ -101,9 +104,9 @@ class CartScreenState extends State<CartScreen> {
         children: <Widget>[
           Container(
               margin: EdgeInsets.only(bottom: 14),
-              child: titleText('Promo code')),
+              child: titleText(translate('cart.promoCode'))),
           Input(
-            placeholder: 'Enter promo code',
+            placeholder: translate('cart.enterPromoCode'),
           ),
         ],
       ),
@@ -141,30 +144,30 @@ class CartScreenState extends State<CartScreen> {
         children: <Widget>[
           Positioned.fill(
               child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: isKeyboardVisible ? 20 : 90),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                buildHeader(),
-                buildOrders(),
-                buildPromoCode()
-              ],
-            ),
-          )),
+                padding: EdgeInsets.only(bottom: isKeyboardVisible ? 20 : 90),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    buildHeader(),
+                    buildOrders(),
+                    buildPromoCode()
+                  ],
+                ),
+              )),
           isKeyboardVisible
               ? null
               : Positioned(
-                  bottom: 20,
-                  left: 20,
-                  right: 20,
-                  child: Container(
-                    child: Button(
-                      isLoading: isLoading,
-                      onTap: onCheckout,
-                      text: 'Checkout',
-                    ),
-                  ),
-                )
+            bottom: 20,
+            left: 20,
+            right: 20,
+            child: Container(
+              child: Button(
+                isLoading: isLoading,
+                onTap: onCheckout,
+                text: translate('cart.checkout'),
+              ),
+            ),
+          )
         ].where((widget) => widget != null).toList(),
       ),
     );

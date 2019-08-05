@@ -1,6 +1,5 @@
 import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
-import 'package:burger_city_flutter/constants/languages.dart';
 import 'package:burger_city_flutter/models/language.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
@@ -10,22 +9,10 @@ import 'package:scoped_model/scoped_model.dart';
 import 'cart_button.dart';
 
 class CustomScaffold extends StatelessWidget {
-  Widget body;
-  Widget leading;
-  Widget bottomNavigationBar;
-  bool showCartButton;
-  List<AvailableLocale> availableLocales = [
-    AvailableLocale(
-        name: 'Русский',
-        languageCode: 'ru',
-        countryCode: 'RU',
-        icon: 'assets/icons/ru-flag.png'),
-    AvailableLocale(
-        name: 'English',
-        languageCode: 'en',
-        countryCode: 'EN',
-        icon: 'assets/icons/en-flag.png'),
-  ];
+  final Widget body;
+  final Widget leading;
+  final Widget bottomNavigationBar;
+  final bool showCartButton;
 
   CustomScaffold(
       {this.body,
@@ -36,7 +23,7 @@ class CustomScaffold extends StatelessWidget {
   onShowLanguageSelect(BuildContext context) async {
     Store store = ScopedModel.of(context);
 
-    List<PopupMenuEntry> items = availableLocales
+    List<PopupMenuEntry> items = store.availableLocales
         .map((availableLocale) => PopupMenuItem(
             value: availableLocale,
             child: Container(

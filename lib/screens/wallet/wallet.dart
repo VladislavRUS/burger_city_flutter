@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/info_panel.dart';
 import 'package:burger_city_flutter/components/info_panel_text.dart';
 import 'package:burger_city_flutter/components/round_checkmark.dart';
@@ -25,9 +26,13 @@ class WalletScreenState extends State<WalletScreen> {
     OrderPayment(name: 'Samsung Pay '),
   ];
 
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
+
   Widget buildTitle() {
     return Container(
-        margin: EdgeInsets.only(bottom: 20), child: TitleText('Order payment'));
+        margin: EdgeInsets.only(bottom: 20), child: TitleText(translate('wallet.title')));
   }
 
   Widget buildOptions() {

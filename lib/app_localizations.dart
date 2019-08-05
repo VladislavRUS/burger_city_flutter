@@ -26,13 +26,11 @@ class AppLocalizations {
       return MapEntry(key, value.toString());
     });
 
-    print(_localizedStrings);
-
     return true;
   }
 
   String translate(String key) {
-    return _localizedStrings[key];
+    return _localizedStrings[key] ?? key;
   }
 }
 

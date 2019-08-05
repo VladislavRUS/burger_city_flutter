@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/info_panel.dart';
@@ -24,12 +25,16 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   AnimationController controller;
   Animation<double> animation;
 
-  final List<SelectButtonOption> options = [
-    SelectButtonOption(name: 'Order now', value: 'now'),
-    SelectButtonOption(name: 'Order in advance', value: 'advance')
+  List<SelectButtonOption> options = [
+    SelectButtonOption(name: 'deliveryDetails.orderNow', value: 'now'),
+    SelectButtonOption(name: 'deliveryDetails.orderInAdvance', value: 'advance')
   ];
 
   SelectButtonOption selectedOption;
+
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
 
   @override
   void initState() {
@@ -52,7 +57,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
           Container(
             margin: EdgeInsets.only(bottom: 20),
             child: buildRegularText(
-                'To proceed , please confirm your delivery details'),
+                translate('deliveryDetails.toProceed')),
           ),
           buildSelectButton()
         ],
@@ -61,7 +66,11 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   }
 
   Widget buildSelectButton() {
-    return SelectButton(options, selectedOption, (option) {
+    List<SelectButtonOption> mappedOptions = options.map((option) {
+      return SelectButtonOption(name: translate(option.name), value: option.value);
+    }).toList();
+
+    return SelectButton(mappedOptions, selectedOption, (option) {
       setState(() {
         selectedOption = option;
       });
@@ -77,7 +86,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   Widget buildAddress() {
     Store store = of(context);
 
-    String addressText = store.order?.address?.title ?? 'Delivery Address';
+    String addressText = store.order?.address?.title ?? translate('deliveryDetails.deliveryAddress');
 
     return Container(
       margin: EdgeInsets.only(bottom: 20),
@@ -86,7 +95,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
         children: <Widget>[
           Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: buildTitleText('Delivery Address')),
+              child: buildTitleText(translate('deliveryDetails.deliveryAddress'))),
           InfoPanel(
             child: Row(
               children: <Widget>[
@@ -128,23 +137,22 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
     String dateTimeMsg;
 
     if (store.order.dateTime == null) {
-      dateTimeMsg = 'Delivery Date & Time';
+      dateTimeMsg = translate('deliveryDetails.deliveryDateAndTime');
     } else {
-      var format = DateFormat('dd.MM.yyyy HH:mm');
+      var format = DateFormat(translate('deliveryDetails.deliveryDateAndTimeFormat'));
       dateTimeMsg = format.format(store.order.dateTime);
     }
 
     return AbsorbPointer(
-      absorbing: selectedOption.value == 'now',
       child: Container(
         margin: EdgeInsets.only(bottom: 20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            buildTitleText('Delivery Date & Time'),
+            buildTitleText(translate('deliveryDetails.deliveryDateAndTime')),
             Container(
                 margin: EdgeInsets.only(bottom: 20),
-                child: buildRegularText('Please select delivery Date & Time')),
+                child: buildRegularText(translate('deliveryDetails.pleaseSelectDateAndTime'))),
             InfoPanel(
                 child: Row(
                   children: <Widget>[
@@ -163,13 +171,24 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
           ],
         ),
       ),
+      absorbing: selectedOption.value == 'now',
     );
   }
 
   Widget buildButton() {
-    return Button(text: 'Proceed to Order', onTap: () {
+    return Button(text: translate('deliveryDetails.proceed'), onTap: () {
       Navigator.of(context).pushNamed(Routes.ORDER);
-    });
+    }, isDisabled: isProceedDisable(),);
+  }
+
+  bool isProceedDisable() {
+    Store store = of(context);
+
+    if (store.order.address == null || store.order.dateTime == null) {
+      return true;
+    }
+
+    return false;
   }
 
   @override

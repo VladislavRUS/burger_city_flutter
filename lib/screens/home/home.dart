@@ -1,10 +1,12 @@
 import 'dart:async';
 
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/big_text.dart';
 import 'package:burger_city_flutter/components/sticker.dart';
 import 'package:burger_city_flutter/components/title_text.dart';
 import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -14,13 +16,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  List<String> headerTexts = [
-    '''World`s Greatest \nBurgers.''',
-    '''Tasty And Incredibly\nDelicious.''',
-    '''You Should Definitely \nTry It.''',
-  ];
-
   PageController headerPageController = PageController();
+  List<String> headerTexts = [
+    'home.greatest',
+    'home.tasty',
+    'home.tryIt',
+  ];
   int currentHeaderPage = 0;
   Timer headerTimer;
   List<String> offers = [
@@ -31,6 +32,10 @@ class HomeScreenState extends State<HomeScreen> {
     'assets/offers/offer2.png',
     'assets/offers/offer3.png',
   ];
+
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
 
   Widget buildHeader() {
     return Container(
@@ -45,7 +50,7 @@ class HomeScreenState extends State<HomeScreen> {
           itemBuilder: (context, index) {
             return Container(
                 margin: EdgeInsets.only(top: 20, left: 20),
-                child: BigText(headerTexts[index]));
+                child: BigText(translate(headerTexts[index])));
           },
           itemCount: headerTexts.length),
     );
@@ -58,7 +63,8 @@ class HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Container(
-              margin: EdgeInsets.all(22), child: TitleText('Best Offers')),
+              margin: EdgeInsets.all(22),
+              child: TitleText(translate('home.bestOffers'))),
           buildOffersList()
         ],
       ),
@@ -95,12 +101,16 @@ class HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Container(
               margin: EdgeInsets.only(bottom: 15),
-              child: Sticker('Track Here', 'Login to continue Burger City')),
-          Sticker('Order Here', 'Login to continue Burger City'),
+              child: Sticker(translate('home.trackHere'),
+                  translate('home.loginToContinue'))),
+          Sticker(
+              translate('home.orderHere'), translate('home.loginToContinue')),
         ],
       ),
     );
   }
+
+  
 
   @override
   void initState() {

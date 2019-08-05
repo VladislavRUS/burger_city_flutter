@@ -1,3 +1,4 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
@@ -18,6 +19,10 @@ class OrderScreen extends StatefulWidget {
 class OrderScreenState extends State<OrderScreen> {
   static Store of(context) => ScopedModel.of<Store>(context);
 
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
+
   Widget buildReview() {
     Store store = of(context);
 
@@ -29,7 +34,7 @@ class OrderScreenState extends State<OrderScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           Text(
-            'Review & Confirm',
+            translate('order.reviewAndConfirm'),
             style: TextStyle(
                 fontSize: 20, color: Colors.white, fontWeight: FontWeight.w700),
           ),
@@ -39,7 +44,7 @@ class OrderScreenState extends State<OrderScreen> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
                 buildTitleText(
-                  'Summary',
+                  translate('order.summary'),
                 )
               ],
             ),
@@ -48,7 +53,7 @@ class OrderScreenState extends State<OrderScreen> {
             margin: EdgeInsets.only(bottom: 10),
             child: Row(
               children: <Widget>[
-                buildTitleText('Subtotal'),
+                buildTitleText(translate('order.subtotal')),
                 Spacer(),
                 buildValueText('${store.getTotalPrice()} \$')
               ],
@@ -58,7 +63,7 @@ class OrderScreenState extends State<OrderScreen> {
             margin: EdgeInsets.only(bottom: 40),
             child: Row(
               children: <Widget>[
-                buildTitleText('Delivery Charge'),
+                buildTitleText(translate('order.deliveryCharge')),
                 Spacer(),
                 buildValueText('50 \$')
               ],
@@ -66,7 +71,7 @@ class OrderScreenState extends State<OrderScreen> {
           ),
           Row(
             children: <Widget>[
-              buildTitleText('Total'),
+              buildTitleText(translate('order.total')),
               Spacer(),
               buildValueText('${store.getTotalPrice() + 50} \$',
                   fontWeight: FontWeight.w700, fontSize: 20.0)
@@ -95,7 +100,7 @@ class OrderScreenState extends State<OrderScreen> {
   Widget buildAddress() {
     Store store = of(context);
 
-    var formatter = DateFormat('dd / MM / yyyy  hh:mm a');
+    var formatter = DateFormat(translate('order.dateTimeFormat'));
     String dateTime = formatter.format(store.order.dateTime);
 
     return Container(
@@ -107,7 +112,7 @@ class OrderScreenState extends State<OrderScreen> {
         children: <Widget>[
           Container(
               margin: EdgeInsets.only(bottom: 5),
-              child: buildValueText('Delivering By',
+              child: buildValueText(translate('order.deliveringBy'),
                   fontSize: 16.0, fontWeight: FontWeight.w700)),
           Container(
               margin: EdgeInsets.only(bottom: 5),
@@ -149,7 +154,7 @@ class OrderScreenState extends State<OrderScreen> {
             left: 20,
             right: 20,
             child: Button(
-              text: 'Confirm',
+              text: translate('order.confirm'),
             ),
           )
         ],

@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
@@ -19,6 +20,10 @@ class AddressScreenState extends State<AddressScreen> {
   static Store of(context) => ScopedModel.of<Store>(context);
   List<AddressDescription> descriptions = [];
   Timer timer;
+
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
 
   onChanged(String text) async {
     if (timer?.isActive ?? false) timer.cancel();
@@ -64,7 +69,7 @@ class AddressScreenState extends State<AddressScreen> {
         child: Stack(
           children: <Widget>[
             Input(
-              placeholder: store.order?.address?.title ?? 'Search',
+              placeholder: store.order?.address?.title ?? translate('address.search'),
               iconData: Icons.search,
               onChanged: onChanged,
             ),

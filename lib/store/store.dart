@@ -34,11 +34,29 @@ class Store extends Model {
   Config config;
   OrderPayment orderPayment;
   Locale locale;
+  List<AvailableLocale> availableLocales = [
+    AvailableLocale(
+        name: 'Русский',
+        languageCode: 'ru',
+        countryCode: 'RU',
+        icon: 'assets/icons/ru-flag.png'),
+    AvailableLocale(
+        name: 'English',
+        languageCode: 'en',
+        countryCode: 'EN',
+        icon: 'assets/icons/en-flag.png'),
+  ];
 
   Store({this.config}) {
+    init();
+  }
+
+  init() {
     order = Order();
     burgers = [];
     shouldRemember = false;
+    AvailableLocale availableLocale = availableLocales.first;
+    locale = Locale(availableLocale.languageCode, availableLocale.countryCode);
   }
 
   toggleRemember() {
@@ -83,7 +101,6 @@ class Store extends Model {
     List<AddressDescription> descriptions = [];
 
     jsonMap["predictions"].forEach((prediction) {
-      print(prediction);
       bool isValid = prediction["types"].firstWhere(
               (elem) => elem == 'street_address',
               orElse: () => null) !=
