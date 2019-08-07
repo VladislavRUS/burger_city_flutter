@@ -173,7 +173,7 @@ class LoginScreenState extends State<LoginScreen> {
 
     hideLoader();
 
-    Navigator.of(context).pushReplacementNamed(Routes.APP);
+    Navigator.pushReplacementNamed(context, Routes.APP);
   }
 
   @override

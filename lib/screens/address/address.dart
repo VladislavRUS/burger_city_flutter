@@ -69,7 +69,8 @@ class AddressScreenState extends State<AddressScreen> {
         child: Stack(
           children: <Widget>[
             Input(
-              placeholder: store.order?.address?.title ?? translate('address.search'),
+              placeholder: store.order?.addressDescription?.title ??
+                  translate('address.search'),
               iconData: Icons.search,
               onChanged: onChanged,
             ),

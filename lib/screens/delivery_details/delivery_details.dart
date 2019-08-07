@@ -12,6 +12,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:scoped_model/scoped_model.dart';
 
+class ButtonOptionIndexes {
+  static const int NOW = 0;
+  static const int IN_ADVANCE = 1;
+}
+
 class DeliveryDetailsScreen extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -21,16 +26,15 @@ class DeliveryDetailsScreen extends StatefulWidget {
 
 class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
     with SingleTickerProviderStateMixin {
-  static Store of(context) => ScopedModel.of<Store>(context);
+  static Store of(context) =>
+      ScopedModel.of<Store>(context, rebuildOnChange: true);
   AnimationController controller;
   Animation<double> animation;
-
-  List<SelectButtonOption> options = [
-    SelectButtonOption(name: 'deliveryDetails.orderNow', value: 'now'),
-    SelectButtonOption(name: 'deliveryDetails.orderInAdvance', value: 'advance')
+  List<String> optionKeys = [
+    'deliveryDetails.orderNow',
+    'deliveryDetails.orderInAdvance'
   ];
-
-  SelectButtonOption selectedOption;
+  int selectedOptionIndex;
 
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
@@ -46,7 +50,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
         .chain(CurveTween(curve: Curves.ease))
         .animate(controller);
 
-    selectedOption = options[0];
+    selectedOptionIndex = ButtonOptionIndexes.NOW;
   }
 
   Widget buildOrderType() {
@@ -56,8 +60,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 20),
-            child: buildRegularText(
-                translate('deliveryDetails.toProceed')),
+            child: buildRegularText(translate('deliveryDetails.toProceed')),
           ),
           buildSelectButton()
         ],
@@ -66,13 +69,21 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   }
 
   Widget buildSelectButton() {
-    List<SelectButtonOption> mappedOptions = options.map((option) {
-      return SelectButtonOption(name: translate(option.name), value: option.value);
+    Store store = of(context);
+
+    List<String> options = optionKeys.map((optionKey) {
+      return translate(optionKey);
     }).toList();
 
-    return SelectButton(mappedOptions, selectedOption, (option) {
+    return SelectButton(options, selectedOptionIndex, (int optionIndex) {
+      if (optionIndex == ButtonOptionIndexes.NOW) {
+        store.order.isInAdvance = false;
+      } else {
+        store.order.isInAdvance = true;
+      }
+
       setState(() {
-        selectedOption = option;
+        selectedOptionIndex = optionIndex;
       });
 
       if (controller.isCompleted) {
@@ -86,7 +97,8 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   Widget buildAddress() {
     Store store = of(context);
 
-    String addressText = store.order?.address?.title ?? translate('deliveryDetails.deliveryAddress');
+    String addressText = store.order?.addressDescription?.title ??
+        translate('deliveryDetails.deliveryAddress');
 
     return Container(
       margin: EdgeInsets.only(bottom: 20),
@@ -95,7 +107,8 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
         children: <Widget>[
           Container(
               margin: EdgeInsets.only(bottom: 20),
-              child: buildTitleText(translate('deliveryDetails.deliveryAddress'))),
+              child:
+                  buildTitleText(translate('deliveryDetails.deliveryAddress'))),
           InfoPanel(
             child: Row(
               children: <Widget>[
@@ -139,7 +152,8 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
     if (store.order.dateTime == null) {
       dateTimeMsg = translate('deliveryDetails.deliveryDateAndTime');
     } else {
-      var format = DateFormat(translate('deliveryDetails.deliveryDateAndTimeFormat'));
+      var format =
+          DateFormat(translate('deliveryDetails.deliveryDateAndTimeFormat'));
       dateTimeMsg = format.format(store.order.dateTime);
     }
 
@@ -152,7 +166,8 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
             buildTitleText(translate('deliveryDetails.deliveryDateAndTime')),
             Container(
                 margin: EdgeInsets.only(bottom: 20),
-                child: buildRegularText(translate('deliveryDetails.pleaseSelectDateAndTime'))),
+                child: buildRegularText(
+                    translate('deliveryDetails.pleaseSelectDateAndTime'))),
             InfoPanel(
                 child: Row(
                   children: <Widget>[
@@ -171,20 +186,25 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
           ],
         ),
       ),
-      absorbing: selectedOption.value == 'now',
+      absorbing: selectedOptionIndex == ButtonOptionIndexes.NOW,
     );
   }
 
   Widget buildButton() {
-    return Button(text: translate('deliveryDetails.proceed'), onTap: () {
-      Navigator.of(context).pushNamed(Routes.ORDER);
-    }, isDisabled: isProceedDisable(),);
+    return Button(
+      text: translate('deliveryDetails.proceed'),
+      onTap: () {
+        Navigator.of(context).pushNamed(Routes.ORDER);
+      },
+      isDisabled: isProceedDisable(),
+    );
   }
 
   bool isProceedDisable() {
     Store store = of(context);
 
-    if (store.order.address == null || store.order.dateTime == null) {
+    if (store.order.addressDescription == null ||
+        store.order.isInAdvance && store.order.dateTime == null) {
       return true;
     }
 

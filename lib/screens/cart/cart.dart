@@ -5,9 +5,7 @@ import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/components/order_items.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
-import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:burger_city_flutter/constants/routes.dart';
-import 'package:burger_city_flutter/models/burger_order.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -114,10 +112,6 @@ class CartScreenState extends State<CartScreen> {
   }
 
   onCheckout() async {
-    Store store = of(context);
-    var now = DateTime.now();
-    store.setOrderDate(now);
-    store.setOrderTime(TimeOfDay(hour: now.hour + 1, minute: now.minute));
     Navigator.of(context).pushNamed(Routes.DELIVERY_DETAILS);
   }
 
@@ -144,30 +138,30 @@ class CartScreenState extends State<CartScreen> {
         children: <Widget>[
           Positioned.fill(
               child: SingleChildScrollView(
-                padding: EdgeInsets.only(bottom: isKeyboardVisible ? 20 : 90),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    buildHeader(),
-                    buildOrders(),
-                    buildPromoCode()
-                  ],
-                ),
-              )),
+            padding: EdgeInsets.only(bottom: isKeyboardVisible ? 20 : 90),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                buildHeader(),
+                buildOrders(),
+                buildPromoCode()
+              ],
+            ),
+          )),
           isKeyboardVisible
               ? null
               : Positioned(
-            bottom: 20,
-            left: 20,
-            right: 20,
-            child: Container(
-              child: Button(
-                isLoading: isLoading,
-                onTap: onCheckout,
-                text: translate('cart.checkout'),
-              ),
-            ),
-          )
+                  bottom: 20,
+                  left: 20,
+                  right: 20,
+                  child: Container(
+                    child: Button(
+                      isLoading: isLoading,
+                      onTap: onCheckout,
+                      text: translate('cart.checkout'),
+                    ),
+                  ),
+                )
         ].where((widget) => widget != null).toList(),
       ),
     );

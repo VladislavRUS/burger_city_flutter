@@ -1,33 +1,30 @@
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 
-class SelectButtonOption {
-  String name;
-  String value;
-
-  SelectButtonOption({this.name, this.value});
-}
-
 class SelectButton extends StatelessWidget {
-  final List<SelectButtonOption> options;
-  final SelectButtonOption selectedOption;
+  final List<String> options;
+  final int selectedOptionIndex;
   final Function onOptionSelect;
 
-  SelectButton(this.options, this.selectedOption, this.onOptionSelect);
+  SelectButton(this.options, this.selectedOptionIndex, this.onOptionSelect);
 
-  Widget buildOption(SelectButtonOption option) {
-    bool isOptionSelected = selectedOption.value == option.value;
+  Widget buildOption(int index, String option) {
+    bool isOptionSelected = selectedOptionIndex == index;
 
     return Expanded(
       child: Material(
         color: isOptionSelected ? AppColors.MAIN_COLOR : Colors.white,
         child: InkWell(
           onTap: () {
-            onOptionSelect(option);
+            if (isOptionSelected) {
+              return;
+            }
+
+            onOptionSelect(index);
           },
           child: Container(
             child: Center(
-              child: Text(option.name,
+              child: Text(option,
                   style: TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.w600,
@@ -44,9 +41,9 @@ class SelectButton extends StatelessWidget {
   List<Widget> buildOptions() {
     List<Widget> optionList = [];
 
-    for (var option in options) {
-      optionList.add(buildOption(option));
-    }
+    options.asMap().forEach((index, option) {
+      optionList.add(buildOption(index, option));
+    });
 
     return optionList;
   }

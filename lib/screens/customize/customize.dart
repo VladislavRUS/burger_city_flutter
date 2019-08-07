@@ -2,9 +2,11 @@ import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
+import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/components/quantity_button.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
-import 'package:burger_city_flutter/models/burger_order.dart';
+import 'package:burger_city_flutter/models/product.dart';
+import 'package:burger_city_flutter/models/product_order.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -20,6 +22,8 @@ class CustomizeScreenState extends State<CustomizeScreen> {
   static Store of(context) => ScopedModel.of<Store>(context);
   int quantity = 1;
   bool isAddingToCard = false;
+  bool isInitialized = false;
+  Product product;
 
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
@@ -41,14 +45,31 @@ class CustomizeScreenState extends State<CustomizeScreen> {
     });
   }
 
+  @override
+  void didChangeDependencies() {
+    if (!isInitialized) {
+      Store store = of(context);
+
+      if (store.currentCombo != null) {
+        product = store.currentCombo;
+      } else {
+        product = store.currentBurger;
+      }
+
+      setState(() {
+        isInitialized = true;
+      });
+    }
+  }
+
   onAddToCart() async {
     showLoader();
 
     Store store = of(context);
-    BurgerOrder burgerOrder = BurgerOrder(store.currentBurger);
-    burgerOrder.quantity = quantity;
 
-    await store.addToCart(burgerOrder);
+    ProductOrder productOrder = ProductOrder(product, quantity);
+
+    await store.addToCart(productOrder);
 
     hideLoader();
     Navigator.of(context).pop();
@@ -76,7 +97,7 @@ class CustomizeScreenState extends State<CustomizeScreen> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 4),
-            child: Text(store.currentBurger.name,
+            child: Text(product.name,
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -97,8 +118,8 @@ class CustomizeScreenState extends State<CustomizeScreen> {
                 child: Container(
                   height: 150,
                   child: Hero(
-                    tag: store.currentBurger.id.toString(),
-                    child: Image.asset(store.currentBurger.imageUrl),
+                    tag: product.id.toString(),
+                    child: Image.asset(product.imageUrl),
                   ),
                 ),
               )
@@ -136,10 +157,12 @@ class CustomizeScreenState extends State<CustomizeScreen> {
     return CustomScaffold(
         showCartButton: false,
         leading: LeadingIconBack(),
-        body: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[buildHeader(), buildButtons()],
-          ),
-        ));
+        body: isInitialized
+            ? SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[buildHeader(), buildButtons()],
+                ),
+              )
+            : Center(child: Loader()));
   }
 }

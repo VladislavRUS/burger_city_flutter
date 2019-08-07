@@ -30,8 +30,9 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
 
   onSelect() {
     Store store = of(context);
-    store.setOrderDate(dateTime);
-    store.setOrderTime(timeOfDay);
+    DateTime orderDateTime = DateTime(dateTime.year, dateTime.month,
+        dateTime.day, timeOfDay.hour, timeOfDay.minute);
+    store.setOrderDateTime(orderDateTime);
     Navigator.of(context).pop();
   }
 
@@ -196,10 +197,9 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
             bottom: 20,
             right: 20,
             child: Button(
-              text: translate('dateAndTime.select'),
-              isLoading: false,
-              onTap: onSelect
-            ),
+                text: translate('dateAndTime.select'),
+                isLoading: false,
+                onTap: onSelect),
           )
         ],
       ),

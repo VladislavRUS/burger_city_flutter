@@ -101,7 +101,7 @@ class OrderScreenState extends State<OrderScreen> {
     Store store = of(context);
 
     var formatter = DateFormat(translate('order.dateTimeFormat'));
-    String dateTime = formatter.format(store.order.dateTime);
+    String dateTime = store.order.isInAdvance ? formatter.format(store.order.dateTime) : '';
 
     return Container(
       margin: EdgeInsets.only(bottom: 25),
@@ -117,7 +117,7 @@ class OrderScreenState extends State<OrderScreen> {
           Container(
               margin: EdgeInsets.only(bottom: 5),
               child: buildTitleText(dateTime)),
-          buildValueText(store.order.address.title),
+          buildValueText(store.order.addressDescription.title),
         ],
       ),
     );

@@ -2,11 +2,15 @@ import 'dart:async';
 
 import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/big_text.dart';
+import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/components/sticker.dart';
 import 'package:burger_city_flutter/components/title_text.dart';
 import 'package:burger_city_flutter/constants/durations.dart';
+import 'package:burger_city_flutter/constants/routes.dart';
+import 'package:burger_city_flutter/models/combo.dart';
+import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -16,6 +20,11 @@ class HomeScreen extends StatefulWidget {
 }
 
 class HomeScreenState extends State<HomeScreen> {
+  static Store of(context) =>
+      ScopedModel.of<Store>(context, rebuildOnChange: true);
+  bool isLoadingCombos = false;
+  bool isInitialized = false;
+
   PageController headerPageController = PageController();
   List<String> headerTexts = [
     'home.greatest',
@@ -24,14 +33,6 @@ class HomeScreenState extends State<HomeScreen> {
   ];
   int currentHeaderPage = 0;
   Timer headerTimer;
-  List<String> offers = [
-    'assets/offers/offer1.png',
-    'assets/offers/offer2.png',
-    'assets/offers/offer3.png',
-    'assets/offers/offer1.png',
-    'assets/offers/offer2.png',
-    'assets/offers/offer3.png',
-  ];
 
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
@@ -72,24 +73,42 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   Widget buildOffersList() {
+    Store store = of(context);
+    List<Combo> combos = store.combos;
+
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 180),
       child: Container(
-        child: ListView.builder(
-            itemBuilder: (context, index) {
-              double rightMargin = index == offers.length - 1 ? 22 : 22;
-              double leftMargin = index == 0 ? 22 : 0;
+        child: isLoadingCombos
+            ? Center(child: Loader())
+            : ListView.builder(
+                itemBuilder: (context, index) {
+                  Combo combo = combos[index];
 
-              return Container(
-                margin: EdgeInsets.only(left: leftMargin, right: rightMargin),
-                width: 130,
-                height: 180,
-                decoration: BoxDecoration(
-                    image: DecorationImage(image: AssetImage(offers[index]))),
-              );
-            },
-            scrollDirection: Axis.horizontal,
-            itemCount: offers.length),
+                  double rightMargin = index == combos.length - 1 ? 22 : 22;
+                  double leftMargin = index == 0 ? 22 : 0;
+
+                  return Material(
+                    child: InkWell(
+                      onTap: () {
+                        store.setCurrentCombo(combo);
+                        Navigator.of(context).pushNamed(Routes.CUSTOMIZE);
+                      },
+                      child: Container(
+                        margin: EdgeInsets.only(
+                            left: leftMargin, right: rightMargin),
+                        width: 130,
+                        height: 180,
+                        child: Hero(
+                          tag: combo.id.toString(),
+                          child: Image.asset(combo.imageUrl),
+                        ),
+                      ),
+                    ),
+                  );
+                },
+                scrollDirection: Axis.horizontal,
+                itemCount: combos.length),
       ),
     );
   }
@@ -110,8 +129,6 @@ class HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  
-
   @override
   void initState() {
     super.initState();
@@ -127,6 +144,41 @@ class HomeScreenState extends State<HomeScreen> {
           duration: Durations.PAGE_TRANSITION_DURATION,
           curve: Curves.easeInOut);
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!isInitialized) {
+      this.init();
+    }
+  }
+
+  init() async {
+    await fetchOffers();
+
+    setState(() {
+      isInitialized = true;
+    });
+  }
+
+  fetchOffers() async {
+    Store store = of(context);
+
+    setState(() {
+      isLoadingCombos = true;
+    });
+
+    try {
+      await store.fetchCombos();
+    } catch (e) {
+      print(e);
+    } finally {
+      setState(() {
+        isLoadingCombos = false;
+      });
+    }
   }
 
   @override

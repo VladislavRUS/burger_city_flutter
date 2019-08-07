@@ -1,5 +1,4 @@
 import 'package:burger_city_flutter/components/custom_chip.dart';
-import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/constants/routes.dart';
@@ -27,31 +26,25 @@ class BurgersScreenState extends State<BurgersScreen> {
     init();
   }
 
-  init() async {
-    showLoader();
-    await this.fetchBurgers();
-    hideLoader();
-  }
-
-  showLoader() {
-    setState(() {
-      isLoading = true;
-    });
-  }
-
-  hideLoader() {
-    setState(() {
-      isLoading = false;
-    });
+  init() {
+    this.fetchBurgers();
   }
 
   fetchBurgers() async {
     Store store = of(context);
 
+    setState(() {
+      isLoading = true;
+    });
+
     try {
       await store.fetchBurgers();
     } catch (e) {
       print(e);
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 

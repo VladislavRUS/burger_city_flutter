@@ -1,8 +1,7 @@
-class Burger {
-  int id;
-  String imageUrl;
-  String name;
-  int price;
+import 'package:burger_city_flutter/constants/categories.dart';
+import 'package:burger_city_flutter/models/product.dart';
 
-  Burger(this.id, this.imageUrl, this.name, this.price);
+class Burger extends Product {
+  Burger(int id, int price, String name, String imageUrl)
+      : super(id, price, name, Categories.BURGER, imageUrl);
 }

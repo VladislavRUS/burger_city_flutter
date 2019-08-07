@@ -1,6 +1,6 @@
 import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
-import 'package:burger_city_flutter/models/language.dart';
+import 'package:burger_city_flutter/models/available_locale.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
