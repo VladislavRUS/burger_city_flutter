@@ -3,6 +3,7 @@ import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/components/order_items.dart';
+import 'package:burger_city_flutter/components/surprise_dialog.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
@@ -101,7 +102,8 @@ class OrderScreenState extends State<OrderScreen> {
     Store store = of(context);
 
     var formatter = DateFormat(translate('order.dateTimeFormat'));
-    String dateTime = store.order.isInAdvance ? formatter.format(store.order.dateTime) : '';
+    String dateTime =
+        store.order.isInAdvance ? formatter.format(store.order.dateTime) : '';
 
     return Container(
       margin: EdgeInsets.only(bottom: 25),
@@ -121,6 +123,13 @@ class OrderScreenState extends State<OrderScreen> {
         ],
       ),
     );
+  }
+
+  onConfirm() {
+    showDialog(
+        context: context,
+        builder: (context) =>
+            SurpriseDialog('assets/cola.png', translate('order.prize')));
   }
 
   Widget buildOrderItems() {
@@ -155,6 +164,7 @@ class OrderScreenState extends State<OrderScreen> {
             right: 20,
             child: Button(
               text: translate('order.confirm'),
+              onTap: onConfirm,
             ),
           )
         ],

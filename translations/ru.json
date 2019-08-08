@@ -52,5 +52,8 @@
   "order.total": "Всего",
   "order.dateTimeFormat": "dd / MM / yyyy  hh:mm",
   "order.deliveringBy": "Будет доставлено",
-  "order.confirm": "Подтвердить"
+  "order.confirm": "Подтвердить",
+  "order.prize": "Кока-кола",
+  "surpriseDialog.congratulations": "Поздравляем!",
+  "surpriseDialog.winPhrase": "Спасибо за оплату! \nПодарок для Вас: "
 }

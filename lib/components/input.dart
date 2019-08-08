@@ -6,11 +6,13 @@ class Input extends StatelessWidget {
   String placeholder;
   bool isObscured;
   Function onChanged;
+  bool autofocus;
 
   Input(
       {this.iconData,
       this.placeholder,
       this.isObscured = false,
+      this.autofocus = false,
       this.onChanged});
 
   onTextChanged(String text) {
@@ -37,6 +39,7 @@ class Input extends StatelessWidget {
       child: Container(
         margin: EdgeInsets.only(left: 15),
         child: TextField(
+          autofocus: this.autofocus,
           onChanged: onTextChanged,
           obscureText: this.isObscured,
           style: TextStyle(

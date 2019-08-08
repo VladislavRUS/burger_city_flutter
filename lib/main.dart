@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
     Store store = ScopedModel.of(context, rebuildOnChange: true);
 
     return MaterialApp(
-      initialRoute: Routes.INTRO,
+      initialRoute: Routes.APP,
       routes: {
         Routes.INTRO: (_) => IntroScreen(),
         Routes.APP: (_) => AppScreen(),

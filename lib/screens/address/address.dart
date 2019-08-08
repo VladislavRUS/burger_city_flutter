@@ -69,6 +69,7 @@ class AddressScreenState extends State<AddressScreen> {
         child: Stack(
           children: <Widget>[
             Input(
+              autofocus: true,
               placeholder: store.order?.addressDescription?.title ??
                   translate('address.search'),
               iconData: Icons.search,

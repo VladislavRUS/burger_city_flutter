@@ -52,5 +52,8 @@
   "order.total": "Total",
   "order.dateTimeFormat": "MM / dd / yyyy  hh:mm a",
   "order.deliveringBy": "Delivering By",
-  "order.confirm": "Confirm"
+  "order.confirm": "Confirm",
+  "order.prize": "Coca-cola",
+  "surpriseDialog.congratulations": "Congratulations!",
+  "surpriseDialog.winPhrase": "Thanks for your payment! You have won a FREE"
 }
