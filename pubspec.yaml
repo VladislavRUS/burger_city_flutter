@@ -29,6 +29,7 @@ dependencies:
   flutter_svg: 0.13.1
   intl: 0.15.8
   requests: ^2.0.1
+  webview_flutter: ^0.3.11
 
 dev_dependencies:
   flutter_test:

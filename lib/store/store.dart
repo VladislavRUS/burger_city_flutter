@@ -136,6 +136,20 @@ class Store extends Model {
     return descriptions;
   }
 
+  Future<Map<String, double>> getCoordinates(String address) async {
+    String url =
+        'https://maps.googleapis.com/maps/api/geocode/json?address=$address&key=${config.apiKey}';
+
+    var jsonMap = await Requests.get(url, json: true);
+    var result = jsonMap['results'][0];
+    var geometry = result['geometry'];
+    var location = geometry['location'];
+    var lat = location['lat'];
+    var lng = location['lng'];
+
+    return { 'latitude': lat + 0.01, 'longitude': lng + 0.01 };
+  }
+
   setAddress(AddressDescription addressDescription) {
     order.addressDescription = addressDescription;
     notifyListeners();
