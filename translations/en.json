@@ -43,6 +43,7 @@
   "deliveryDetails.proceed": "Proceed to order",
   "address.search": "Search",
   "dateAndTime.dateFormat": "MM / dd / yyyy",
+  "dateAndTime.timeFormat": "hh:mm a",
   "dateAndTime.pickupDate": "Pickup Date",
   "dateAndTime.selectDate": "Please select Pickup Date",
   "dateAndTime.pickupTime": "Pickup Time",

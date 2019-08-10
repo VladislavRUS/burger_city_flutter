@@ -122,6 +122,12 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
   }
 
   Widget buildTime() {
+    var format = DateFormat(translate('dateAndTime.timeFormat'));
+    DateTime now = DateTime.now();
+    DateTime dateTime = DateTime(
+        now.year, now.month, now.day, timeOfDay.hour, timeOfDay.minute);
+    String formattedTime = format.format(dateTime);
+
     return Container(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -142,8 +148,7 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
               onTap: openTimePicker,
               child: Row(
                 children: <Widget>[
-                  InfoPanelText(
-                      '${timeOfDay.hour}:${timeOfDay.minute > 9 ? timeOfDay.minute : '0' + timeOfDay.minute.toString()}'),
+                  InfoPanelText(formattedTime),
                   Spacer(),
                   Icon(
                     Icons.access_time,
