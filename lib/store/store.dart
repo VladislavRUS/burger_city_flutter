@@ -67,6 +67,11 @@ class Store extends Model {
 
   Future addToCart(ProductOrder productOrder) async {
     await Future.delayed(Durations.REQUEST_DURATION);
+
+    if (confirmedOrder != null) {
+      confirmedOrder = null;
+    }
+
     order.addProductOrder(productOrder);
     notifyListeners();
   }
@@ -89,7 +94,6 @@ class Store extends Model {
     var predictions = jsonMap["predictions"];
 
     predictions.forEach((prediction) {
-      print(prediction);
       descriptions.add(AddressDescription.fromJson(prediction));
     });
 
@@ -127,7 +131,8 @@ class Store extends Model {
     notifyListeners();
   }
 
-  confirmOrder() {
+  confirmOrder() async {
+    await Future.delayed(Durations.REQUEST_DURATION);
     order.isConfirmed = true;
     confirmedOrder = Order.fromOrder(order);
 

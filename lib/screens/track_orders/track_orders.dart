@@ -98,7 +98,6 @@ class TrackOrdersScreenState extends State<TrackOrdersScreen>
     return (WebView(
       javascriptMode: JavascriptMode.unrestricted,
       onWebViewCreated: (controller) async {
-        print(await controller.currentUrl());
         webViewController = controller;
       },
       initialUrl: Uri.dataFromString(map, mimeType: 'text/html').toString(),

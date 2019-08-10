@@ -23,6 +23,7 @@ class OrderScreen extends StatefulWidget {
 class OrderScreenState extends State<OrderScreen> {
   static Store of(context) => ScopedModel.of<Store>(context);
   bool isInitialized = false;
+  bool isConfirming = false;
   Order currentOrder;
   int totalPrice;
 
@@ -127,15 +128,23 @@ class OrderScreenState extends State<OrderScreen> {
     );
   }
 
-  onConfirm() {
+  onConfirm() async {
+    setState(() {
+      isConfirming = true;
+    });
+
     Store store = of(context);
-    store.confirmOrder();
+    await store.confirmOrder();
     currentOrder = store.confirmedOrder;
 
     showDialog(
         context: context,
         builder: (context) => SurpriseDialog(
             'assets/drinks/cola_1.png', translate('order.prize')));
+
+    setState(() {
+      isConfirming = true;
+    });
   }
 
   onTrack() {
@@ -157,6 +166,7 @@ class OrderScreenState extends State<OrderScreen> {
       childButton = Button(
         text: translate('order.confirm'),
         onTap: onConfirm,
+        isLoading: isConfirming,
       );
     }
 
@@ -189,25 +199,38 @@ class OrderScreenState extends State<OrderScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return CustomScaffold(
-      showCartButton: false,
-      leading: LeadingIconBack(),
-      body: Stack(
-        children: <Widget>[
-          Positioned.fill(
-            child: SingleChildScrollView(
-              padding: EdgeInsets.only(bottom: 60),
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: <Widget>[
-                    buildReview(),
-                    buildAddress(),
-                    buildOrderItems(),
-                  ]),
+    Store store = of(context);
+
+    return WillPopScope(
+      onWillPop: () {
+        if (store.confirmedOrder != null) {
+          Navigator.of(context).pushReplacementNamed(Routes.APP);
+        } else {
+          Navigator.of(context).pop();
+        }
+      },
+      child: CustomScaffold(
+        showCartButton: false,
+        leading: store.confirmedOrder == null
+            ? LeadingIconBack()
+            : Placeholder(color: Colors.transparent),
+        body: Stack(
+          children: <Widget>[
+            Positioned.fill(
+              child: SingleChildScrollView(
+                padding: EdgeInsets.only(bottom: 60),
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      buildReview(),
+                      buildAddress(),
+                      buildOrderItems(),
+                    ]),
+              ),
             ),
-          ),
-          buildBottomButton()
-        ],
+            buildBottomButton()
+          ],
+        ),
       ),
     );
   }
