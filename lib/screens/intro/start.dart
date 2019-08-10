@@ -63,8 +63,7 @@ class StartScreenState extends State<StartScreen> {
 
     hideLoader();
 
-    pageController.animateToPage(1,
-        duration: Durations.PAGE_TRANSITION_DURATION, curve: Curves.easeInOut);
+    pageController.jumpToPage(1);
   }
 
   showLoader() {

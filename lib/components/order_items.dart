@@ -28,7 +28,7 @@ class OrderItems extends StatelessWidget {
               children: <Widget>[
                 Container(
                   padding: EdgeInsets.only(top: 10, bottom: 10),
-                  margin: EdgeInsets.only(left: 10),
+                  margin: EdgeInsets.only(left: 20),
                   width: 125,
                   height: 125,
                   child: Image.asset(productOrder.product.imageUrl),

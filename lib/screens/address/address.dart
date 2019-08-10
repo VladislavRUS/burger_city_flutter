@@ -30,6 +30,8 @@ class AddressScreenState extends State<AddressScreen> {
     if (timer?.isActive ?? false) timer.cancel();
     timer = Timer(const Duration(milliseconds: 500), () async {
       List<AddressDescription> foundDescriptions = await findPlace(text);
+      print(foundDescriptions.length);
+
       setState(() {
         descriptions = foundDescriptions;
       });

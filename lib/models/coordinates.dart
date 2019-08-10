@@ -1,8 +1,8 @@
 import 'dart:math';
 
 class Coordinates {
-  int latitude;
-  int longitude;
+  double latitude;
+  double longitude;
 
   Coordinates.fromGoogleResult(map) {
     var geometry = map['geometry'];

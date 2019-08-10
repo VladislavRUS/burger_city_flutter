@@ -7,7 +7,7 @@ class AddressDescription {
 
   AddressDescription.fromJson(map) {
     id = map["id"];
-    title = map["title"];
+    title = map["description"];
 
     var streetPrediction = map["types"]
         .firstWhere((elem) => elem == 'street_address', orElse: () => null);

@@ -89,6 +89,7 @@ class Store extends Model {
     var predictions = jsonMap["predictions"];
 
     predictions.forEach((prediction) {
+      print(prediction);
       descriptions.add(AddressDescription.fromJson(prediction));
     });
 
