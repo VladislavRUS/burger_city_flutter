@@ -5,6 +5,9 @@ import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/components/order_items.dart';
 import 'package:burger_city_flutter/components/surprise_dialog.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/constants/app_pages.dart';
+import 'package:burger_city_flutter/constants/routes.dart';
+import 'package:burger_city_flutter/models/order.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -19,14 +22,15 @@ class OrderScreen extends StatefulWidget {
 
 class OrderScreenState extends State<OrderScreen> {
   static Store of(context) => ScopedModel.of<Store>(context);
+  bool isInitialized = false;
+  Order currentOrder;
+  int totalPrice;
 
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
   }
 
   Widget buildReview() {
-    Store store = of(context);
-
     return Container(
       margin: EdgeInsets.only(bottom: 20),
       color: Colors.black,
@@ -56,7 +60,7 @@ class OrderScreenState extends State<OrderScreen> {
               children: <Widget>[
                 buildTitleText(translate('order.subtotal')),
                 Spacer(),
-                buildValueText('${store.getTotalPrice()} \$')
+                buildValueText('$totalPrice \$')
               ],
             ),
           ),
@@ -74,7 +78,7 @@ class OrderScreenState extends State<OrderScreen> {
             children: <Widget>[
               buildTitleText(translate('order.total')),
               Spacer(),
-              buildValueText('${store.getTotalPrice() + 50} \$',
+              buildValueText('${totalPrice + 50} \$',
                   fontWeight: FontWeight.w700, fontSize: 20.0)
             ],
           )
@@ -99,11 +103,9 @@ class OrderScreenState extends State<OrderScreen> {
   }
 
   Widget buildAddress() {
-    Store store = of(context);
-
     var formatter = DateFormat(translate('order.dateTimeFormat'));
     String dateTime =
-        store.order.isInAdvance ? formatter.format(store.order.dateTime) : '';
+        currentOrder.isInAdvance ? formatter.format(currentOrder.dateTime) : '';
 
     return Container(
       margin: EdgeInsets.only(bottom: 25),
@@ -119,23 +121,70 @@ class OrderScreenState extends State<OrderScreen> {
           Container(
               margin: EdgeInsets.only(bottom: 5),
               child: buildTitleText(dateTime)),
-          buildValueText(store.order.addressDescription.title),
+          buildValueText(currentOrder.addressDescription.title),
         ],
       ),
     );
   }
 
   onConfirm() {
+    Store store = of(context);
+    store.confirmOrder();
+    currentOrder = store.confirmedOrder;
+
     showDialog(
         context: context,
-        builder: (context) =>
-            SurpriseDialog('assets/cola.png', translate('order.prize')));
+        builder: (context) => SurpriseDialog(
+            'assets/drinks/cola_1.png', translate('order.prize')));
+  }
+
+  onTrack() {
+    Navigator.of(context).pushReplacementNamed(Routes.APP,
+        arguments: {"activePage": AppPages.TRACK_ORDERS});
   }
 
   Widget buildOrderItems() {
-    Store store = of(context);
+    return OrderItems(currentOrder, translate);
+  }
 
-    return OrderItems(order: store.order);
+  Widget buildBottomButton() {
+    Store store = of(context);
+    Widget childButton;
+
+    if (store.confirmedOrder != null) {
+      childButton = Button(text: translate('order.trackOrder'), onTap: onTrack);
+    } else {
+      childButton = Button(
+        text: translate('order.confirm'),
+        onTap: onConfirm,
+      );
+    }
+
+    return Positioned(
+      bottom: 20,
+      left: 20,
+      right: 20,
+      child: AnimatedSwitcher(
+          duration: Duration(
+            milliseconds: 200,
+          ),
+          child: childButton),
+    );
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (!isInitialized) {
+      init();
+    }
+  }
+
+  init() {
+    Store store = of(context);
+    currentOrder = store.order;
+    totalPrice = store.getTotalPrice();
   }
 
   @override
@@ -149,24 +198,15 @@ class OrderScreenState extends State<OrderScreen> {
             child: SingleChildScrollView(
               padding: EdgeInsets.only(bottom: 60),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: <Widget>[
-                  buildReview(),
-                  buildAddress(),
-                  buildOrderItems()
-                ],
-              ),
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    buildReview(),
+                    buildAddress(),
+                    buildOrderItems(),
+                  ]),
             ),
           ),
-          Positioned(
-            bottom: 20,
-            left: 20,
-            right: 20,
-            child: Button(
-              text: translate('order.confirm'),
-              onTap: onConfirm,
-            ),
-          )
+          buildBottomButton()
         ],
       ),
     );

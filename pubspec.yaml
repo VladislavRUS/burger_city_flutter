@@ -49,9 +49,12 @@ flutter:
 
   assets:
     - assets/
-    - assets/offers/
-    - assets/icons/
     - assets/burgers/
+    - assets/combos/
+    - assets/snacks/
+    - assets/drinks/
+    - assets/icons/
+    - assets/images/
     - translations/ru.json
     - translations/en.json
   # To add assets to your application, add an assets section, like this:

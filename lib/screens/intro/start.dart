@@ -5,7 +5,7 @@ import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:flutter/material.dart';
 
 class StartScreen extends StatefulWidget {
-  PageController pageController;
+  final PageController pageController;
 
   StartScreen({this.pageController});
 
@@ -30,7 +30,7 @@ class StartScreenState extends State<StartScreen> {
       margin: EdgeInsets.only(top: 85),
       width: 100,
       height: 120,
-      child: Image.asset('assets/logo.png'),
+      child: Image.asset('assets/images/logo.png'),
     );
   }
 

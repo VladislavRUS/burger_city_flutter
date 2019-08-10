@@ -40,7 +40,7 @@ class LoginScreenState extends State<LoginScreen> {
       margin: EdgeInsets.only(top: 85),
       width: 100,
       height: 120,
-      child: Image.asset('assets/logo.png'),
+      child: Image.asset('assets/images/logo.png'),
     );
   }
 

@@ -5,6 +5,7 @@ class Order {
   List<ProductOrder> productOrders = [];
   DateTime dateTime;
   bool isInAdvance = false;
+  bool isConfirmed = false;
   AddressDescription addressDescription;
 
   addProductOrder(ProductOrder newProductOrder) {
@@ -19,5 +20,17 @@ class Order {
     } else {
       productOrders.add(newProductOrder);
     }
+  }
+
+  Order() {}
+
+  Order.fromOrder(Order order) {
+    productOrders = order.productOrders.sublist(0);
+    dateTime = order.dateTime;
+    isInAdvance = order.isInAdvance;
+    isConfirmed = order.isConfirmed;
+    AddressDescription description = order.addressDescription;
+    addressDescription = AddressDescription(
+        description.id, description.title, description.isValid);
   }
 }

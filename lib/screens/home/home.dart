@@ -3,8 +3,10 @@ import 'dart:async';
 import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/big_text.dart';
 import 'package:burger_city_flutter/components/loader.dart';
+import 'package:burger_city_flutter/components/ripple_image.dart';
 import 'package:burger_city_flutter/components/sticker.dart';
 import 'package:burger_city_flutter/components/title_text.dart';
+import 'package:burger_city_flutter/constants/app_pages.dart';
 import 'package:burger_city_flutter/constants/durations.dart';
 import 'package:burger_city_flutter/constants/routes.dart';
 import 'package:burger_city_flutter/models/combo.dart';
@@ -13,6 +15,10 @@ import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class HomeScreen extends StatefulWidget {
+  Function onChangePage;
+
+  HomeScreen({this.onChangePage});
+
   @override
   State<StatefulWidget> createState() {
     return HomeScreenState();
@@ -44,7 +50,7 @@ class HomeScreenState extends State<HomeScreen> {
       decoration: BoxDecoration(
           image: DecorationImage(
               fit: BoxFit.cover,
-              image: AssetImage('assets/home-header-bg.png'))),
+              image: AssetImage('assets/images/home-bg.jpg'))),
       child: PageView.builder(
           physics: NeverScrollableScrollPhysics(),
           controller: headerPageController,
@@ -88,21 +94,19 @@ class HomeScreenState extends State<HomeScreen> {
                   double rightMargin = index == combos.length - 1 ? 22 : 22;
                   double leftMargin = index == 0 ? 22 : 0;
 
-                  return Material(
-                    child: InkWell(
-                      onTap: () {
-                        store.setCurrentCombo(combo);
-                        Navigator.of(context).pushNamed(Routes.CUSTOMIZE);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                            left: leftMargin, right: rightMargin),
-                        width: 130,
-                        height: 180,
-                        child: Hero(
-                          tag: combo.id.toString(),
-                          child: Image.asset(combo.imageUrl),
-                        ),
+                  return Container(
+                    margin:
+                        EdgeInsets.only(left: leftMargin, right: rightMargin),
+                    child: Container(
+                      child: RippleImage(
+                        130,
+                        180,
+                        combo.imageUrl,
+                        borderRadius: 6,
+                        onTap: () {
+                          store.setCurrentCombo(combo);
+                          Navigator.of(context).pushNamed(Routes.CUSTOMIZE);
+                        },
                       ),
                     ),
                   );
@@ -120,10 +124,20 @@ class HomeScreenState extends State<HomeScreen> {
         children: <Widget>[
           Container(
               margin: EdgeInsets.only(bottom: 15),
-              child: Sticker(translate('home.trackHere'),
-                  translate('home.loginToContinue'))),
+              child: Sticker(
+                translate('home.trackHere'),
+                translate('home.trackHereSubtitle'),
+                onTap: () {
+                  widget.onChangePage(AppPages.TRACK_ORDERS);
+                },
+              )),
           Sticker(
-              translate('home.orderHere'), translate('home.loginToContinue')),
+            translate('home.orderHere'),
+            translate('home.orderHereSubtitle'),
+            onTap: () {
+              widget.onChangePage(AppPages.BURGERS);
+            },
+          ),
         ],
       ),
     );
@@ -133,7 +147,7 @@ class HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
 
-    headerTimer = Timer.periodic(Duration(seconds: 5), (timer) {
+    headerTimer = Timer.periodic(Duration(seconds: 3), (timer) {
       if (currentHeaderPage < headerTexts.length - 1) {
         currentHeaderPage++;
       } else {
@@ -182,9 +196,16 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   void dispose() {
-    super.dispose();
     headerTimer.cancel();
+    super.dispose();
   }
 
   @override

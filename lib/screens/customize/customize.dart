@@ -1,10 +1,14 @@
 import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
+import 'package:burger_city_flutter/components/info_panel.dart';
+import 'package:burger_city_flutter/components/info_panel_text.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/components/quantity_button.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/constants/categories.dart';
+import 'package:burger_city_flutter/models/combo.dart';
 import 'package:burger_city_flutter/models/product.dart';
 import 'package:burger_city_flutter/models/product_order.dart';
 import 'package:burger_city_flutter/store/store.dart';
@@ -23,7 +27,7 @@ class CustomizeScreenState extends State<CustomizeScreen> {
   int quantity = 1;
   bool isAddingToCard = false;
   bool isInitialized = false;
-  Product product;
+  Product currentProduct;
 
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
@@ -47,13 +51,15 @@ class CustomizeScreenState extends State<CustomizeScreen> {
 
   @override
   void didChangeDependencies() {
+    super.didChangeDependencies();
+
     if (!isInitialized) {
       Store store = of(context);
 
       if (store.currentCombo != null) {
-        product = store.currentCombo;
+        currentProduct = store.currentCombo;
       } else {
-        product = store.currentBurger;
+        currentProduct = store.currentBurger;
       }
 
       setState(() {
@@ -67,7 +73,7 @@ class CustomizeScreenState extends State<CustomizeScreen> {
 
     Store store = of(context);
 
-    ProductOrder productOrder = ProductOrder(product, quantity);
+    ProductOrder productOrder = ProductOrder(currentProduct, quantity);
 
     await store.addToCart(productOrder);
 
@@ -88,8 +94,6 @@ class CustomizeScreenState extends State<CustomizeScreen> {
   }
 
   Widget buildHeader() {
-    Store store = of(context);
-
     return Container(
       margin: EdgeInsets.only(top: 28, left: 20, right: 20, bottom: 36),
       child: Column(
@@ -97,7 +101,7 @@ class CustomizeScreenState extends State<CustomizeScreen> {
         children: <Widget>[
           Container(
             margin: EdgeInsets.only(bottom: 4),
-            child: Text(product.name,
+            child: Text(translate(currentProduct.keyName),
                 style: TextStyle(
                     fontSize: 20,
                     fontWeight: FontWeight.w700,
@@ -115,11 +119,19 @@ class CustomizeScreenState extends State<CustomizeScreen> {
           Row(
             children: <Widget>[
               Expanded(
-                child: Container(
-                  height: 150,
-                  child: Hero(
-                    tag: product.id.toString(),
-                    child: Image.asset(product.imageUrl),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(6),
+                  child: Container(
+                    height: 200,
+                    child: Hero(
+                      tag: currentProduct.id.toString(),
+                      child: Image.asset(
+                        currentProduct.imageUrl,
+                        fit: currentProduct.category == Categories.COMBO
+                            ? BoxFit.cover
+                            : BoxFit.fitHeight,
+                      ),
+                    ),
                   ),
                 ),
               )
@@ -152,17 +164,55 @@ class CustomizeScreenState extends State<CustomizeScreen> {
     );
   }
 
+  Widget buildIncludedItems() {
+    if (currentProduct.category != Categories.COMBO) {
+      return null;
+    }
+
+    List<Widget> items = [];
+
+    (currentProduct as Combo).products.forEach((product) {
+      items.add(Container(
+        padding: EdgeInsets.only(left: 20, right: 20),
+        margin: EdgeInsets.only(bottom: 10),
+        child: InfoPanel(
+          child: Row(
+            children: <Widget>[
+              Container(
+                  margin: EdgeInsets.only(right: 20),
+                  width: 45,
+                  height: 45,
+                  child: Image.asset(product.imageUrl)),
+              InfoPanelText(translate(product.keyName))
+            ],
+          ),
+        ),
+      ));
+    });
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: items,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return CustomScaffold(
         showCartButton: false,
         leading: LeadingIconBack(),
-        body: isInitialized
-            ? SingleChildScrollView(
-                child: Column(
-                  children: <Widget>[buildHeader(), buildButtons()],
-                ),
-              )
-            : Center(child: Loader()));
+        body: SizedBox.expand(
+          child: isInitialized
+              ? SingleChildScrollView(
+                  child: Column(
+                    children: <Widget>[
+                      buildHeader(),
+                      buildButtons(),
+                      buildIncludedItems()
+                    ].where((widget) => widget != null).toList(),
+                  ),
+                )
+              : Center(child: Loader()),
+        ));
   }
 }

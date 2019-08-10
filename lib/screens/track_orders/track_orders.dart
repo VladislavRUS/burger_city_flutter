@@ -1,4 +1,7 @@
+import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/loader.dart';
+import 'package:burger_city_flutter/components/title_text.dart';
+import 'package:burger_city_flutter/models/coordinates.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart' show rootBundle;
@@ -12,13 +15,21 @@ class TrackOrdersScreen extends StatefulWidget {
   }
 }
 
-class TrackOrdersScreenState extends State<TrackOrdersScreen> {
+class TrackOrdersScreenState extends State<TrackOrdersScreen>
+    with SingleTickerProviderStateMixin {
   static Store of(context) => ScopedModel.of(context);
   bool isInitialized = false;
   String map;
-  Map<String, double> coordinates;
+  Coordinates coordinates;
+  Animation<double> animation;
+  AnimationController animationController;
 
   WebViewController webViewController;
+  Widget body;
+
+  String translate(key) {
+    return AppLocalizations.of(context).translate(key);
+  }
 
   @override
   void didChangeDependencies() {
@@ -30,13 +41,33 @@ class TrackOrdersScreenState extends State<TrackOrdersScreen> {
   }
 
   init() async {
-    await loadMap();
-    await getCoordinates();
-    prepareMap();
+    Store store = of(context);
+
+    animationController =
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500));
+    animation = Tween(begin: 0.0, end: 1.0)
+        .chain(CurveTween(curve: Curves.ease))
+        .animate(animationController);
+
+    if (store.confirmedOrder == null) {
+      body = buildEmptyPlaceholder();
+    } else {
+      await loadMap();
+      await getCoordinates();
+      prepareMap();
+      body = buildWebView();
+    }
 
     setState(() {
       isInitialized = true;
+      animationController.forward();
     });
+  }
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   loadMap() async {
@@ -47,8 +78,8 @@ class TrackOrdersScreenState extends State<TrackOrdersScreen> {
     Store store = of(context);
 
     try {
-      coordinates =
-          await store.getCoordinates(store.order.addressDescription.title);
+      coordinates = await store
+          .getCoordinates(store.confirmedOrder.addressDescription.title);
     } catch (e) {
       print(e);
     }
@@ -57,22 +88,33 @@ class TrackOrdersScreenState extends State<TrackOrdersScreen> {
   prepareMap() {
     Store store = of(context);
 
-    map = map.replaceFirst('LATITUDE', coordinates['latitude'].toString())
-        .replaceFirst('LONGITUDE', coordinates['longitude'].toString())
+    map = map
+        .replaceFirst('LATITUDE', coordinates.latitude.toString())
+        .replaceFirst('LONGITUDE', coordinates.longitude.toString())
         .replaceFirst('API_KEY', store.config.apiKey);
+  }
+
+  Widget buildWebView() {
+    return (WebView(
+      javascriptMode: JavascriptMode.unrestricted,
+      onWebViewCreated: (controller) async {
+        print(await controller.currentUrl());
+        webViewController = controller;
+      },
+      initialUrl: Uri.dataFromString(map, mimeType: 'text/html').toString(),
+    ));
+  }
+
+  Widget buildEmptyPlaceholder() {
+    return Center(child: TitleText(translate('trackOrders.empty')));
   }
 
   @override
   Widget build(BuildContext context) {
     return isInitialized
-        ? WebView(
-            javascriptMode: JavascriptMode.unrestricted,
-            onWebViewCreated: (controller) async {
-              print(await controller.currentUrl());
-              webViewController = controller;
-            },
-            initialUrl:
-                Uri.dataFromString(map, mimeType: 'text/html').toString(),
+        ? FadeTransition(
+            opacity: animation,
+            child: body,
           )
         : Center(child: Loader());
   }

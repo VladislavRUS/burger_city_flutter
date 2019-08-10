@@ -1,9 +1,9 @@
 class Product {
   int id;
   int price;
-  String name;
+  String keyName;
   String category;
   String imageUrl;
 
-  Product(this.id, this.price, this.name, this.category, this.imageUrl);
+  Product(this.id, this.price, this.keyName, this.category, this.imageUrl);
 }

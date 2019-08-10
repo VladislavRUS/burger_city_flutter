@@ -19,13 +19,6 @@ class WalletScreenState extends State<WalletScreen> {
   static Store of(context) =>
       ScopedModel.of<Store>(context, rebuildOnChange: true);
 
-  List<OrderPayment> orderPayments = [
-    OrderPayment(name: 'M Wallet'),
-    OrderPayment(name: 'Cash on Delivery'),
-    OrderPayment(name: 'Apple Pay'),
-    OrderPayment(name: 'Samsung Pay '),
-  ];
-
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
   }
@@ -40,7 +33,7 @@ class WalletScreenState extends State<WalletScreen> {
 
     List<Widget> options = [];
 
-    orderPayments.forEach((orderPayment) {
+    store.orderPayments.forEach((orderPayment) {
       options.add(Container(
         margin: EdgeInsets.only(bottom: 24),
         child: InfoPanel(

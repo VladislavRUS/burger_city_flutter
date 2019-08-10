@@ -3,7 +3,9 @@ import 'package:burger_city_flutter/components/button.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
+import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/components/order_items.dart';
+import 'package:burger_city_flutter/components/title_text.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/constants/routes.dart';
 import 'package:burger_city_flutter/store/store.dart';
@@ -21,6 +23,8 @@ class CartScreenState extends State<CartScreen> {
   static Store of(context) => ScopedModel.of(context, rebuildOnChange: true);
 
   bool isLoading = false;
+  bool isInitialized = false;
+  bool cartHasProducts = false;
 
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
@@ -83,7 +87,8 @@ class CartScreenState extends State<CartScreen> {
             child: titleText(translate('cart.includes')),
           ),
           OrderItems(
-            order: store.order,
+            store.order,
+            translate,
           )
         ],
       ),
@@ -128,42 +133,72 @@ class CartScreenState extends State<CartScreen> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!isInitialized) {
+      init();
+    }
+  }
+
+  init() {
+    Store store = of(context);
+
+    cartHasProducts = store.order.productOrders.length > 0;
+
+    setState(() {
+      isInitialized = true;
+    });
+  }
+
+  Widget buildEmptyPlaceholder() {
+    return Center(child: TitleText(translate('cart.empty')));
+  }
+
+  Widget buildBody() {
+    if (!isInitialized) {
+      return Center(child: Loader());
+    }
+
+    if (!cartHasProducts) {
+      return buildEmptyPlaceholder();
+    }
+
     var isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
+    return (Stack(
+      children: <Widget>[
+        Positioned.fill(
+            child: SingleChildScrollView(
+          padding: EdgeInsets.only(bottom: isKeyboardVisible ? 20 : 90),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: <Widget>[buildHeader(), buildOrders(), buildPromoCode()],
+          ),
+        )),
+        isKeyboardVisible
+            ? null
+            : Positioned(
+                bottom: 20,
+                left: 20,
+                right: 20,
+                child: Container(
+                  child: Button(
+                    isLoading: isLoading,
+                    onTap: onCheckout,
+                    text: translate('cart.checkout'),
+                  ),
+                ),
+              )
+      ].where((widget) => widget != null).toList(),
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return CustomScaffold(
       leading: LeadingIconBack(),
       showCartButton: false,
-      body: Stack(
-        children: <Widget>[
-          Positioned.fill(
-              child: SingleChildScrollView(
-            padding: EdgeInsets.only(bottom: isKeyboardVisible ? 20 : 90),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                buildHeader(),
-                buildOrders(),
-                buildPromoCode()
-              ],
-            ),
-          )),
-          isKeyboardVisible
-              ? null
-              : Positioned(
-                  bottom: 20,
-                  left: 20,
-                  right: 20,
-                  child: Container(
-                    child: Button(
-                      isLoading: isLoading,
-                      onTap: onCheckout,
-                      text: translate('cart.checkout'),
-                    ),
-                  ),
-                )
-        ].where((widget) => widget != null).toList(),
-      ),
+      body: buildBody(),
     );
   }
 }

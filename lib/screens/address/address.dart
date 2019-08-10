@@ -5,6 +5,7 @@ import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/components/input.dart';
 import 'package:burger_city_flutter/components/leading_arrow_back.dart';
 import 'package:burger_city_flutter/models/address_description.dart';
+import 'package:burger_city_flutter/store/mock.dart';
 import 'package:burger_city_flutter/store/store.dart';
 import 'package:flutter/material.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -28,12 +29,21 @@ class AddressScreenState extends State<AddressScreen> {
   onChanged(String text) async {
     if (timer?.isActive ?? false) timer.cancel();
     timer = Timer(const Duration(milliseconds: 500), () async {
-      Store store = of(context);
-      List<AddressDescription> foundDescriptions = await store.findPlace(text);
+      List<AddressDescription> foundDescriptions = await findPlace(text);
       setState(() {
         descriptions = foundDescriptions;
       });
     });
+  }
+
+  Future<List<AddressDescription>> findPlace(String place) async {
+    Store store = of(context);
+
+    try {
+      return await store.findPlace(place);
+    } catch (e) {
+      return Mock.addressDescriptions;
+    }
   }
 
   Widget buildList() {

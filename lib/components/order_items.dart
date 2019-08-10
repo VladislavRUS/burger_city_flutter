@@ -5,8 +5,9 @@ import 'package:flutter/material.dart';
 
 class OrderItems extends StatelessWidget {
   final Order order;
+  final Function translate;
 
-  OrderItems({this.order});
+  OrderItems(this.order, this.translate);
 
   Widget buildOrder(ProductOrder productOrder) {
     return Container(
@@ -47,7 +48,7 @@ class OrderItems extends StatelessWidget {
                         Container(
                           margin: EdgeInsets.only(bottom: 4),
                           child: Text(
-                            '${productOrder.quantity} ${productOrder.product.name}',
+                            '${productOrder.quantity} ${translate(productOrder.product.keyName)}',
                             style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w700,
@@ -55,7 +56,7 @@ class OrderItems extends StatelessWidget {
                           ),
                         ),
                         Text(
-                          '${productOrder.product.name}',
+                          '${translate(productOrder.product.keyName)}',
                           style: TextStyle(
                               fontSize: 14,
                               fontWeight: FontWeight.w600,

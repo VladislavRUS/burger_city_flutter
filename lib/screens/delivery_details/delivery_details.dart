@@ -28,7 +28,7 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
     with SingleTickerProviderStateMixin {
   static Store of(context) =>
       ScopedModel.of<Store>(context, rebuildOnChange: true);
-  AnimationController controller;
+  AnimationController animationController;
   Animation<double> animation;
   List<String> optionKeys = [
     'deliveryDetails.orderNow',
@@ -44,11 +44,11 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
   void initState() {
     super.initState();
 
-    controller =
+    animationController =
         AnimationController(duration: Duration(milliseconds: 150), vsync: this);
     animation = Tween(begin: 0.0, end: 1.0)
         .chain(CurveTween(curve: Curves.ease))
-        .animate(controller);
+        .animate(animationController);
 
     selectedOptionIndex = ButtonOptionIndexes.NOW;
   }
@@ -86,10 +86,10 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
         selectedOptionIndex = optionIndex;
       });
 
-      if (controller.isCompleted) {
-        controller.reverse();
+      if (animationController.isCompleted) {
+        animationController.reverse();
       } else {
-        controller.forward();
+        animationController.forward();
       }
     });
   }
@@ -209,6 +209,13 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
     }
 
     return false;
+  }
+
+
+  @override
+  void dispose() {
+    animationController.dispose();
+    super.dispose();
   }
 
   @override

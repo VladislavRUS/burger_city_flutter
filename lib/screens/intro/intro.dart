@@ -34,7 +34,7 @@ class IntroScreenState extends State<IntroScreen> {
     return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/bg-darken.png'), fit: BoxFit.cover)),
+                image: AssetImage('assets/images/bg-darken.png'), fit: BoxFit.cover)),
         child: Scaffold(backgroundColor: Colors.transparent, body: pageView));
   }
 }

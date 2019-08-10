@@ -142,7 +142,8 @@ class DateAndTimeScreenScreen extends State<DateAndTimeScreen> {
               onTap: openTimePicker,
               child: Row(
                 children: <Widget>[
-                  InfoPanelText('${timeOfDay.hour}:${timeOfDay.minute}'),
+                  InfoPanelText(
+                      '${timeOfDay.hour}:${timeOfDay.minute > 9 ? timeOfDay.minute : '0' + timeOfDay.minute.toString()}'),
                   Spacer(),
                   Icon(
                     Icons.access_time,

@@ -3,8 +3,9 @@ import 'package:flutter/material.dart';
 class Sticker extends StatelessWidget {
   String title;
   String subtitle;
+  Function onTap;
 
-  Sticker(this.title, this.subtitle);
+  Sticker(this.title, this.subtitle, {this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +14,11 @@ class Sticker extends StatelessWidget {
       child: Material(
         color: Colors.black,
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            if (onTap != null) {
+              onTap();
+            }
+          },
           child: Container(
             height: 98,
             child: Row(
@@ -22,9 +27,9 @@ class Sticker extends StatelessWidget {
                 Container(
                   width: 42,
                   height: 51,
-                  margin: EdgeInsets.only(left: 44, right: 16),
+                  margin: EdgeInsets.only(left: 33, right: 16),
                   child: Image(
-                    image: AssetImage('assets/logo.png'),
+                    image: AssetImage('assets/images/logo.png'),
                   ),
                 ),
                 Column(

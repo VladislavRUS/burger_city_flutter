@@ -1,12 +1,13 @@
 import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/custom_scaffold.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
+import 'package:burger_city_flutter/constants/app_pages.dart';
 import 'package:burger_city_flutter/screens/burgers/burgers.dart';
-import 'package:burger_city_flutter/screens/favourites/favourites.dart';
 import 'package:burger_city_flutter/screens/home/home.dart';
 import 'package:burger_city_flutter/screens/track_orders/track_orders.dart';
 import 'package:burger_city_flutter/screens/wallet/wallet.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppScreen extends StatefulWidget {
@@ -17,16 +18,11 @@ class AppScreen extends StatefulWidget {
 }
 
 class AppScreenState extends State<AppScreen> {
-  List<Widget> pages = [
-    HomeScreen(),
-    BurgersScreen(),
-    FavouritesScreen(),
-    TrackOrdersScreen(),
-    WalletScreen()
-  ];
+  List<Widget> pages;
   PageController pageController = PageController();
   PageView pageView;
-  int currentPage = 0;
+  int currentPage = AppPages.HOME;
+  bool isLoaded = false;
 
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
@@ -43,14 +39,24 @@ class AppScreenState extends State<AppScreen> {
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          buildNavigationBarIcon('assets/icons/home.svg', 0, translate('app.home')),
-          buildNavigationBarIcon('assets/icons/burgers.svg', 1, translate('app.burgers')),
-          buildNavigationBarIcon('assets/icons/star.svg', 2, translate('app.favourites')),
-          buildNavigationBarIcon('assets/icons/track.svg', 3, translate('app.trackOrders')),
-          buildNavigationBarIcon('assets/icons/wallet.svg', 4, translate('app.wallet')),
+          buildNavigationBarIcon(
+              'assets/icons/home.svg', AppPages.HOME, translate('app.home')),
+          buildNavigationBarIcon('assets/icons/burgers.svg', AppPages.BURGERS,
+              translate('app.burgers')),
+          buildNavigationBarIcon('assets/icons/track.svg',
+              AppPages.TRACK_ORDERS, translate('app.trackOrders')),
+          buildNavigationBarIcon('assets/icons/wallet.svg', AppPages.WALLET,
+              translate('app.wallet')),
         ],
       ),
     );
+  }
+
+  onChangePage(int index) {
+    setState(() {
+      currentPage = index;
+    });
+    pageController.jumpToPage(index);
   }
 
   Widget buildNavigationBarIcon(String iconAsset, int index, String text) {
@@ -69,10 +75,7 @@ class AppScreenState extends State<AppScreen> {
         child: Material(
           child: InkWell(
             onTap: () {
-              setState(() {
-                currentPage = index;
-              });
-              pageController.jumpToPage(index);
+              onChangePage(index);
             },
             child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -93,11 +96,34 @@ class AppScreenState extends State<AppScreen> {
   @override
   void initState() {
     super.initState();
+
+    pages = [
+      HomeScreen(
+        onChangePage: onChangePage,
+      ),
+      BurgersScreen(),
+      TrackOrdersScreen(),
+      WalletScreen()
+    ];
+
+    this.init();
+  }
+
+  init() {
     pageView = PageView(
       physics: NeverScrollableScrollPhysics(),
       controller: pageController,
       children: pages,
     );
+
+    SchedulerBinding.instance.addPostFrameCallback((callback) {
+      var arguments = ModalRoute.of(context).settings.arguments;
+
+      if (arguments != null) {
+        int page = (arguments as Map<String, int>)["activePage"];
+        onChangePage(page);
+      }
+    });
   }
 
   @override

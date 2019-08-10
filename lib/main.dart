@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
     Store store = ScopedModel.of(context, rebuildOnChange: true);
 
     return MaterialApp(
-      initialRoute: Routes.APP,
+      initialRoute: Routes.INTRO,
       routes: {
         Routes.INTRO: (_) => IntroScreen(),
         Routes.APP: (_) => AppScreen(),
@@ -46,10 +46,7 @@ class MyApp extends StatelessWidget {
         Routes.ORDER: (_) => OrderScreen(),
       },
       locale: store.locale,
-      supportedLocales: [
-        Locale('en', 'US'),
-        Locale('ru', 'RU')
-      ],
+      supportedLocales: [Locale('en', 'US'), Locale('ru', 'RU')],
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,

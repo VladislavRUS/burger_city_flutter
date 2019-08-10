@@ -98,7 +98,7 @@ class CustomScaffold extends StatelessWidget {
         title: Container(
           width: 66,
           height: 22,
-          child: SvgPicture.asset('assets/logo-title.svg'),
+          child: SvgPicture.asset('assets/images/logo-title.svg'),
         ),
         actions: <Widget>[
           showCartButton
