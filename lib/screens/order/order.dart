@@ -148,7 +148,8 @@ class OrderScreenState extends State<OrderScreen> {
   }
 
   onTrack() {
-    Navigator.of(context).pushReplacementNamed(Routes.APP,
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        Routes.APP, (Route<dynamic> route) => false,
         arguments: {"activePage": AppPages.TRACK_ORDERS});
   }
 
