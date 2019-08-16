@@ -26,7 +26,8 @@ class Order {
 
   Order.fromOrder(Order order) {
     productOrders = order.productOrders.sublist(0);
-    dateTime = order.dateTime;
+    dateTime = DateTime.fromMicrosecondsSinceEpoch(
+        order.dateTime.millisecondsSinceEpoch);
     isInAdvance = order.isInAdvance;
     isConfirmed = order.isConfirmed;
     AddressDescription description = order.addressDescription;
