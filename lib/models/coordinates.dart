@@ -9,12 +9,7 @@ class Coordinates {
     var location = geometry['location'];
     var lat = location['lat'];
     var lng = location['lng'];
-    latitude = lat + _getRandomAddition();
-    longitude = lng + _getRandomAddition();
-  }
-
-  _getRandomAddition() {
-    var r = Random();
-    return r.nextBool() ? 0.1 : -0.1;
+    latitude = lat + 0.1;
+    longitude = lng + 0.1;
   }
 }
