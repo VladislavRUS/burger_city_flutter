@@ -18,4 +18,4 @@ It is needed for address autocompletion and maps
 
 ### Preview
 
-<img width=200 src="./screenshot_1.png"/> | <img width=200 src="./screenshot_2.png"/> | <img width=200 src="./screenshot_3.png"/> | <img width=200 src="./screenshot_4.png"/> 
+<img width=200 src="./screenshots/screenshot_1.png"/> | <img width=200 src="./screenshots/screenshot_2.png"/> | <img width=200 src="./screenshots/screenshot_3.png"/> | <img width=200 src="./screenshots/screenshot_4.png"/> 
