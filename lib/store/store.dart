@@ -34,7 +34,7 @@ class Store extends Model {
     orderPayments = Mock.orderPayments;
     order = Order();
     orderPayment = orderPayments.first;
-    AvailableLocale availableLocale = availableLocales.first;
+    AvailableLocale availableLocale = availableLocales.last;
     locale = Locale(availableLocale.languageCode, availableLocale.countryCode);
   }
 

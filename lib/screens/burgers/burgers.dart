@@ -46,7 +46,7 @@ class BurgersScreenState extends State<BurgersScreen> {
             spreadRadius: 8,
             blurRadius: 15,
             offset: const Offset(0, 8))
-      ], color: Colors.white),
+      ], color: Colors.white, borderRadius: BorderRadius.circular(6)),
       child: Material(
         color: Colors.transparent,
         child: InkWell(
@@ -58,7 +58,7 @@ class BurgersScreenState extends State<BurgersScreen> {
           child: Row(
             children: <Widget>[
               Container(
-                margin: EdgeInsets.only(right: 4),
+                margin: EdgeInsets.only(right: 4, left: 5),
                 width: 80,
                 height: 50,
                 child: Hero(
