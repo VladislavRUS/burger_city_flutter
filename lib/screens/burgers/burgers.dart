@@ -1,6 +1,5 @@
 import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/custom_chip.dart';
-import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:burger_city_flutter/constants/routes.dart';
 import 'package:burger_city_flutter/models/burger.dart';
@@ -16,48 +15,12 @@ class BurgersScreen extends StatefulWidget {
 }
 
 class BurgersScreenState extends State<BurgersScreen> {
-  bool isLoading = false;
   List<Burger> burgers = [];
 
   static Store of(BuildContext context) => ScopedModel.of<Store>(context);
 
   String translate(key) {
     return AppLocalizations.of(context).translate(key);
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    init();
-  }
-
-  init() {
-    this.fetchBurgers();
-  }
-
-  fetchBurgers() async {
-    Store store = of(context);
-
-    setState(() {
-      isLoading = true;
-    });
-
-    try {
-      await store.fetchBurgers();
-    } catch (e) {
-      print(e);
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
   }
 
   Widget buildList() {
@@ -144,11 +107,7 @@ class BurgersScreenState extends State<BurgersScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: isLoading
-          ? Center(
-              child: Loader(),
-            )
-          : buildList(),
+      body: buildList(),
     );
   }
 }

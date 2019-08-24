@@ -1,5 +1,5 @@
 class OrderPayment {
   final String name;
 
-  OrderPayment({ this.name });
+  OrderPayment({this.name});
 }

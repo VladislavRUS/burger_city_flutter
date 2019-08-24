@@ -7,7 +7,8 @@ class Button extends StatelessWidget {
   final bool isDisabled;
   final Function onTap;
 
-  Button({this.text, this.isLoading = false, this.onTap, this.isDisabled = false});
+  Button(
+      {this.text, this.isLoading = false, this.onTap, this.isDisabled = false});
 
   _onTap() {
     if (isLoading) {

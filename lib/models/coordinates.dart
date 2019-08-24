@@ -1,5 +1,3 @@
-import 'dart:math';
-
 class Coordinates {
   double latitude;
   double longitude;

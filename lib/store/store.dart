@@ -28,12 +28,14 @@ class Store extends Model {
   List<OrderPayment> orderPayments;
 
   Store({this.config}) {
+    combos = Mock.combos;
     availableLocales = Mock.availableLocales;
+    burgers = Mock.burgers;
+    orderPayments = Mock.orderPayments;
+    order = Order();
+    orderPayment = orderPayments.first;
     AvailableLocale availableLocale = availableLocales.first;
     locale = Locale(availableLocale.languageCode, availableLocale.countryCode);
-    orderPayments = Mock.orderPayments;
-    orderPayment = orderPayments.first;
-    order = Order();
   }
 
   toggleRemember() {
@@ -44,12 +46,6 @@ class Store extends Model {
   Future fetchBurgers() async {
     await Future.delayed(Durations.REQUEST_DURATION);
     burgers = Mock.burgers;
-    notifyListeners();
-  }
-
-  Future fetchCombos() async {
-    await Future.delayed(Durations.REQUEST_DURATION);
-    combos = Mock.combos;
     notifyListeners();
   }
 

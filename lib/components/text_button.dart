@@ -5,10 +5,8 @@ class TextButton extends StatelessWidget {
   Function onTap;
   Color textColor;
 
-  TextButton(
-      {this.text,
-      this.textColor = const Color.fromARGB(168, 255, 255, 255),
-      this.onTap});
+  TextButton(this.text,
+      {this.textColor = const Color.fromARGB(168, 255, 255, 255), this.onTap});
 
   @override
   Widget build(BuildContext context) {

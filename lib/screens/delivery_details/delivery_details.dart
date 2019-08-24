@@ -211,7 +211,6 @@ class DeliveryDetailsScreenState extends State<DeliveryDetailsScreen>
     return false;
   }
 
-
   @override
   void dispose() {
     animationController.dispose();

@@ -30,7 +30,7 @@ class TextButtonCheckbox extends StatelessWidget {
                 height: 18,
               ),
             ),
-            TextButton(text: this.text)
+            TextButton(this.text)
           ],
         ),
       ),

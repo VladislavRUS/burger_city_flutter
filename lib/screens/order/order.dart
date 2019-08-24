@@ -103,7 +103,7 @@ class OrderScreenState extends State<OrderScreen> {
             fontSize: fontSize, fontWeight: fontWeight, color: Colors.white));
   }
 
-  Widget buildAddress() {
+  Widget buildDeliveryDetails() {
     var formatter = DateFormat(translate('order.dateTimeFormat'));
     String dateTime =
         currentOrder.isInAdvance ? formatter.format(currentOrder.dateTime) : '';
@@ -154,7 +154,10 @@ class OrderScreenState extends State<OrderScreen> {
   }
 
   Widget buildOrderItems() {
-    return OrderItems(currentOrder, translate);
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 20.0),
+      child: OrderItems(currentOrder, translate),
+    );
   }
 
   Widget buildBottomButton() {
@@ -224,7 +227,7 @@ class OrderScreenState extends State<OrderScreen> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: <Widget>[
                       buildReview(),
-                      buildAddress(),
+                      buildDeliveryDetails(),
                       buildOrderItems(),
                     ]),
               ),

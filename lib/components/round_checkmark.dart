@@ -20,7 +20,7 @@ class RoundCheckmark extends StatelessWidget {
       child: Center(
           child: SvgPicture.asset(
         'assets/icons/checkmark.svg',
-            color: isSelected ? Colors.white : Colors.black,
+        color: isSelected ? Colors.white : Colors.black,
       )),
     );
   }

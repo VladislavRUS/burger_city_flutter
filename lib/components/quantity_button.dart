@@ -2,8 +2,6 @@ import 'package:burger_city_flutter/constants/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import 'custom_chip.dart';
-
 class QuantityButton extends StatelessWidget {
   final String value;
   Function onDec;

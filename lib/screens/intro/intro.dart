@@ -1,8 +1,6 @@
-import 'package:flutter/material.dart';
-
 import 'package:burger_city_flutter/screens/intro/login.dart';
-
 import 'package:burger_city_flutter/screens/intro/start.dart';
+import 'package:flutter/material.dart';
 
 class IntroScreen extends StatefulWidget {
   @override
@@ -34,7 +32,8 @@ class IntroScreenState extends State<IntroScreen> {
     return Container(
         decoration: BoxDecoration(
             image: DecorationImage(
-                image: AssetImage('assets/images/bg-darken.png'), fit: BoxFit.cover)),
+                image: AssetImage('assets/images/bg-darken.png'),
+                fit: BoxFit.cover)),
         child: Scaffold(backgroundColor: Colors.transparent, body: pageView));
   }
 }

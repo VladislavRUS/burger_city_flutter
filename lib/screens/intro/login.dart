@@ -64,7 +64,7 @@ class LoginScreenState extends State<LoginScreen> {
                     onTap: store.toggleRemember,
                   ),
                   Spacer(),
-                  TextButton(text: translate('login.forgot'), onTap: () {})
+                  TextButton(translate('login.forgot'), onTap: () {})
                 ],
               ),
             ),
@@ -109,9 +109,9 @@ class LoginScreenState extends State<LoginScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 TextButton(
+                  translate('login.newUser'),
                   onTap: () {},
                   textColor: AppColors.MAIN_COLOR,
-                  text: translate('login.newUser'),
                 ),
               ],
             ),

@@ -25,7 +25,8 @@ class WalletScreenState extends State<WalletScreen> {
 
   Widget buildTitle() {
     return Container(
-        margin: EdgeInsets.only(bottom: 20), child: TitleText(translate('wallet.title')));
+        margin: EdgeInsets.only(bottom: 20),
+        child: TitleText(translate('wallet.title')));
   }
 
   Widget buildOptions() {

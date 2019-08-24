@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:burger_city_flutter/app_localizations.dart';
 import 'package:burger_city_flutter/components/big_text.dart';
-import 'package:burger_city_flutter/components/loader.dart';
 import 'package:burger_city_flutter/components/ripple_image.dart';
 import 'package:burger_city_flutter/components/sticker.dart';
 import 'package:burger_city_flutter/components/title_text.dart';
@@ -28,7 +27,6 @@ class HomeScreen extends StatefulWidget {
 class HomeScreenState extends State<HomeScreen> {
   static Store of(context) =>
       ScopedModel.of<Store>(context, rebuildOnChange: true);
-  bool isLoadingCombos = false;
   bool isInitialized = false;
 
   PageController headerPageController = PageController();
@@ -85,34 +83,31 @@ class HomeScreenState extends State<HomeScreen> {
     return ConstrainedBox(
       constraints: BoxConstraints(maxHeight: 180),
       child: Container(
-        child: isLoadingCombos
-            ? Center(child: Loader())
-            : ListView.builder(
-                itemBuilder: (context, index) {
-                  Combo combo = combos[index];
+        child: ListView.builder(
+            itemBuilder: (context, index) {
+              Combo combo = combos[index];
 
-                  double rightMargin = index == combos.length - 1 ? 22 : 22;
-                  double leftMargin = index == 0 ? 22 : 0;
+              double rightMargin = index == combos.length - 1 ? 22 : 22;
+              double leftMargin = index == 0 ? 22 : 0;
 
-                  return Container(
-                    margin:
-                        EdgeInsets.only(left: leftMargin, right: rightMargin),
-                    child: Container(
-                      child: RippleImage(
-                        130,
-                        180,
-                        combo.imageUrl,
-                        borderRadius: 6,
-                        onTap: () {
-                          store.setCurrentCombo(combo);
-                          Navigator.of(context).pushNamed(Routes.CUSTOMIZE);
-                        },
-                      ),
-                    ),
-                  );
-                },
-                scrollDirection: Axis.horizontal,
-                itemCount: combos.length),
+              return Container(
+                margin: EdgeInsets.only(left: leftMargin, right: rightMargin),
+                child: Container(
+                  child: RippleImage(
+                    130,
+                    180,
+                    combo.imageUrl,
+                    borderRadius: 6,
+                    onTap: () {
+                      store.setCurrentCombo(combo);
+                      Navigator.of(context).pushNamed(Routes.CUSTOMIZE);
+                    },
+                  ),
+                ),
+              );
+            },
+            scrollDirection: Axis.horizontal,
+            itemCount: combos.length),
       ),
     );
   }
@@ -158,48 +153,6 @@ class HomeScreenState extends State<HomeScreen> {
           duration: Durations.PAGE_TRANSITION_DURATION,
           curve: Curves.easeInOut);
     });
-  }
-
-  @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    if (!isInitialized) {
-      this.init();
-    }
-  }
-
-  init() async {
-    await fetchOffers();
-
-    setState(() {
-      isInitialized = true;
-    });
-  }
-
-  fetchOffers() async {
-    Store store = of(context);
-
-    setState(() {
-      isLoadingCombos = true;
-    });
-
-    try {
-      await store.fetchCombos();
-    } catch (e) {
-      print(e);
-    } finally {
-      setState(() {
-        isLoadingCombos = false;
-      });
-    }
-  }
-
-  @override
-  void setState(fn) {
-    if (mounted) {
-      super.setState(fn);
-    }
   }
 
   @override

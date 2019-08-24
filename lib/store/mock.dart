@@ -15,7 +15,6 @@ class Mock {
     Burger(5, 19, 'burgers.burger_5', 'assets/burgers/burger_5.png'),
     Burger(6, 18, 'burgers.burger_6', 'assets/burgers/burger_6.png'),
     Burger(7, 15, 'burgers.burger_7', 'assets/burgers/burger_7.png'),
-    Burger(8, 12, 'burgers.burger_8', 'assets/burgers/burger_8.png'),
   ];
 
   static List<Snack> snacks = [
@@ -59,8 +58,11 @@ class Mock {
   ];
 
   static List<AddressDescription> addressDescriptions = [
-    AddressDescription('129348', '129348, Москва, ул.Красная Сосна, 33, кв.33', true),
-    AddressDescription('115516', '115516, Москва, ул.Товарищеская, 91, кв.15', true),
-    AddressDescription('109316', '109316, Москва, ул.Стройковская, 78, кв.46', true),
+    AddressDescription(
+        '129348', '129348, Москва, ул.Красная Сосна, 33, кв.33', true),
+    AddressDescription(
+        '115516', '115516, Москва, ул.Товарищеская, 91, кв.15', true),
+    AddressDescription(
+        '109316', '109316, Москва, ул.Стройковская, 78, кв.46', true),
   ];
 }
