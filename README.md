@@ -18,6 +18,4 @@ It is needed for address autocompletion and maps
 
 ### Preview
 
-Login | Home | Burgers | Customize
-
 <img width=200 src="./screenshot_1.png"/> | <img width=200 src="./screenshot_2.png"/> | <img width=200 src="./screenshot_3.png"/> | <img width=200 src="./screenshot_4.png"/> 
