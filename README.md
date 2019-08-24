@@ -18,7 +18,6 @@ It is needed for address autocompletion and maps
 
 ### Preview
 
-<img width=300 src="./screenshot_1.png"/>
-<img width=300 src="./screenshot_2.png"/> 
-<img width=300 src="./screenshot_3.png"/> 
-<img width=300 src="./screenshot_4.png"/> 
+Login | Home | Burgers | Customize
+
+<img width=200 src="./screenshot_1.png"/> | <img width=200 src="./screenshot_2.png"/> | <img width=200 src="./screenshot_3.png"/> | <img width=200 src="./screenshot_4.png"/> 
