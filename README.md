@@ -14,7 +14,7 @@ To run app you need to place config.json file into assets folder with apiKey pro
 }
 ```
 
-It is needed for address autocompletion and maps 
+It is needed for address autocompletion and maps (can be just an empty string, that mock data will be used)
 
 ### Preview
 Flutter screenshots:
