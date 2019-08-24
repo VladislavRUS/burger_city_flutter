@@ -87,6 +87,11 @@ class Store extends Model {
     List<AddressDescription> descriptions = [];
 
     var jsonMap = await Api.findPlace(input, config.apiKey);
+
+    if (jsonMap['error_message']) {
+      throw ErrorDescription(jsonMap['error_message']);
+    }
+
     var predictions = jsonMap["predictions"];
 
     predictions.forEach((prediction) {
@@ -98,6 +103,11 @@ class Store extends Model {
 
   Future<Coordinates> getCoordinates(String address) async {
     var jsonMap = await Api.getCoordinates(address, config.apiKey);
+
+    if (jsonMap['error_message']) {
+      throw ErrorDescription(jsonMap['error_message']);
+    }
+
     var result = jsonMap['results'][0];
     return Coordinates.fromGoogleResult(result);
   }

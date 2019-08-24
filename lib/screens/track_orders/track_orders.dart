@@ -19,6 +19,7 @@ class TrackOrdersScreenState extends State<TrackOrdersScreen>
     with SingleTickerProviderStateMixin {
   static Store of(context) => ScopedModel.of(context);
   bool isInitialized = false;
+  bool useFakeMap = false;
   String map;
   Coordinates coordinates;
   Animation<double> animation;
@@ -54,8 +55,13 @@ class TrackOrdersScreenState extends State<TrackOrdersScreen>
     } else {
       await loadMap();
       await getCoordinates();
-      prepareMap();
-      body = buildWebView();
+
+      if (useFakeMap) {
+        body = SizedBox.expand(child: Image.asset('assets/images/fake-map.png', fit: BoxFit.fitWidth,));
+      } else {
+        prepareMap();
+        body = buildWebView();
+      }
     }
 
     setState(() {
@@ -81,6 +87,9 @@ class TrackOrdersScreenState extends State<TrackOrdersScreen>
       coordinates = await store
           .getCoordinates(store.confirmedOrder.addressDescription.title);
     } catch (e) {
+      setState(() {
+        useFakeMap = true;
+      });
       print(e);
     }
   }
