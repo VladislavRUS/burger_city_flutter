@@ -34,7 +34,7 @@ class Store extends Model {
     orderPayments = Mock.orderPayments;
     order = Order();
     orderPayment = orderPayments.first;
-    AvailableLocale availableLocale = availableLocales.last;
+    AvailableLocale availableLocale = availableLocales.first;
     locale = Locale(availableLocale.languageCode, availableLocale.countryCode);
   }
 
@@ -88,7 +88,8 @@ class Store extends Model {
 
     var jsonMap = await Api.findPlace(input, config.apiKey);
 
-    if (jsonMap['error_message']) {
+    if (jsonMap['error_message'] != null) {
+      print(jsonMap['error_message']);
       throw ErrorDescription(jsonMap['error_message']);
     }
 
