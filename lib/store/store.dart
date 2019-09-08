@@ -105,7 +105,7 @@ class Store extends Model {
   Future<Coordinates> getCoordinates(String address) async {
     var jsonMap = await Api.getCoordinates(address, config.apiKey);
 
-    if (jsonMap['error_message']) {
+    if (jsonMap['error_message'] != null) {
       throw ErrorDescription(jsonMap['error_message']);
     }
 

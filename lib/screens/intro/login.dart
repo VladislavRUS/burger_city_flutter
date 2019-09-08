@@ -99,10 +99,9 @@ class LoginScreenState extends State<LoginScreen> {
 
   Widget buildBottomButtons() {
     return Container(
-      height: 100,
+      margin: EdgeInsets.only(top: 50),
       child: Column(
         children: <Widget>[
-          Spacer(),
           Container(
             margin: EdgeInsets.only(bottom: 26),
             child: Row(
@@ -120,6 +119,7 @@ class LoginScreenState extends State<LoginScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
+                margin: EdgeInsets.only(bottom: 20),
                 width: 250,
                 child: Text(
                   translate('login.termsOfService'),
@@ -178,21 +178,13 @@ class LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox.expand(
-      child: Stack(
+    return SingleChildScrollView(
+      child: Column(
         children: <Widget>[
-          LayoutBuilder(builder: (context, constraints) {
-            return SingleChildScrollView(
-              child: Column(
-                children: <Widget>[
-                  buildLogo(),
-                  buildForm(),
-                  buildBottomButtons()
-                ],
-              ),
-            );
-          }),
-        ].where((widget) => widget != null).toList(),
+          buildLogo(),
+          buildForm(),
+          buildBottomButtons()
+        ],
       ),
     );
   }

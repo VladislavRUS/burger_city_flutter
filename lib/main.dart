@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
     Store store = ScopedModel.of(context, rebuildOnChange: true);
 
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       initialRoute: Routes.INTRO,
       routes: {
         Routes.INTRO: (_) => IntroScreen(),
